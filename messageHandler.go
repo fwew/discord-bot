@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
+	fwew "github.com/fwew/fwew_lib"
 	"log"
 )
 
@@ -81,4 +82,37 @@ func sendDiscordMessagePaginated(ctx *dgc.Ctx, pages []string) {
 			curPage: &p,
 		}
 	}
+}
+
+func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
+	var output []string
+	var outTemp string
+	for _, worda := range words {
+		for i, word := range worda {
+			line, err := word.ToOutputLine(
+				i,
+				true, // were discord-bot, always with markdown
+				ctx.CustomObjects["showIPA"].(bool),
+				ctx.CustomObjects["showInfix"].(bool),
+				ctx.CustomObjects["showDashed"].(bool),
+				ctx.CustomObjects["showInfixDots"].(bool),
+				ctx.CustomObjects["showSource"].(bool),
+			)
+			if err != nil {
+				sendDiscordMessage(ctx, fmt.Sprintf("Error creating output line: %s", err))
+				return
+			}
+
+			if (len(outTemp) + len(line)) > 2000 {
+				// add to output
+				output = append(output, outTemp)
+				outTemp = ""
+			}
+			outTemp += line
+		}
+		outTemp += "\n"
+	}
+	// add last outTemp also
+	output = append(output, outTemp)
+	sendDiscordMessagePaginated(ctx, output)
 }
