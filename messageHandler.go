@@ -57,10 +57,10 @@ func sendDiscordMessagePaginated(ctx *dgc.Ctx, pages []string) {
 		titleSimple += " " + arguments
 	}
 
-	var title string
+	var title = titleSimple
 	// add pages to
 	if len(pages) > 1 {
-		title = titleSimple + fmt.Sprintf(" (Page %d/%d)", 1, len(pages))
+		title = fmt.Sprintf(" (Page %d/%d)", 1, len(pages))
 	}
 
 	// post first page
