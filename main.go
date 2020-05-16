@@ -64,6 +64,12 @@ func main() {
 		panic(err)
 	}
 
+	// cache fwew dictionary
+	err = fwew.CacheDict()
+	if err != nil {
+		panic(err)
+	}
+
 	// create discord session
 	session, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
