@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 	fwew "github.com/fwew/fwew_lib"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -44,11 +46,26 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	sendDiscordMessagePaginated(ctx, output)
 }
 
+type Config struct {
+	Token string `json:"token"`
+}
+
+var config Config
+
 func main() {
-	token := "NzEwMzEwNDM3NzQ4NjA0OTc5.XrymMQ.JTqKqKRTNO3nNUXL4JLxXckfRIs"
+	// load json config
+	jsonFile, err := ioutil.ReadFile("conf.json")
+	if err != nil {
+		panic(err)
+	}
+
+	err = json.Unmarshal(jsonFile, &config)
+	if err != nil {
+		panic(err)
+	}
 
 	// create discord session
-	session, err := discordgo.New("Bot " + token)
+	session, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
 		panic(err)
 	}
