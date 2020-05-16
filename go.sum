@@ -1,5 +1,13 @@
+github.com/Lukaesebrot/dgc v0.0.0-20200514002314-6e4d5cff9919 h1:FtrmlJIo1CCWnm+fMp+8dqxFIQgvePkgzmBPynIw6oU=
+github.com/Lukaesebrot/dgc v0.0.0-20200514002314-6e4d5cff9919/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
+github.com/Lukaesebrot/dgc v0.0.0-20200515131847-06aebbe3381a h1:kECoOJYXT3QmE0nkHNs6dTu2PwM5t6WfSqvLDlTdDak=
+github.com/Lukaesebrot/dgc v0.0.0-20200515131847-06aebbe3381a/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
+github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
+github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/c-bata/go-prompt v0.2.3 h1:jjCS+QhG/sULBhAaBdjb2PlMRVaKXQgn+4yzaauvs2s=
 github.com/c-bata/go-prompt v0.2.3/go.mod h1:VzqtzE2ksDBcdln8G7mk2RX9QyGjH+OVqOCSiVIqS34=
+github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
+github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
 github.com/mattn/go-colorable v0.1.4 h1:snbPLB8fVfU9iwbbo30TPtbLRzwWu6aJS6Xh4eaaviA=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
 github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=
@@ -14,6 +22,8 @@ github.com/pkg/term v0.0.0-20190109203006-aa71e9d9e942 h1:A7GG7zcGjl3jqAqGPmcNjd
 github.com/pkg/term v0.0.0-20190109203006-aa71e9d9e942/go.mod h1:eCbImbZ95eXtAUIbLAuAVnBnwf83mjf6QIVH8SHYwqQ=
 github.com/tirea/fwew v3.3.0-dev+incompatible h1:W2rpVF7OrLcW0+Dw/sNhf5oftne8c9pRmldI8BYznjM=
 github.com/tirea/fwew v3.3.0-dev+incompatible/go.mod h1:itgTztIOVE4QT/G1bZFtCSSnD1+KT3Au1v085qdN9Fk=
+golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16 h1:y6ce7gCWtnH+m3dCjzQ1PCuwl28DDIc3VNnvY29DlIA=
+golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20191008105621-543471e840be/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
