@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/Lukaesebrot/dgc"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -51,6 +53,7 @@ func addMiddleware(router *dgc.Router) {
 		return true
 	})
 
+	// check if user is allowed to use this command (developer@Fwew Bot Testing discord)
 	router.AddMiddleware("admin", func(ctx *dgc.Ctx) bool {
 		author := ctx.Event.Author.ID
 		guild := ctx.Event.GuildID
@@ -71,5 +74,30 @@ func addMiddleware(router *dgc.Router) {
 		}
 
 		return false
+	})
+
+	// write command and params in statistics file
+	router.AddMiddleware("statistic", func(ctx *dgc.Ctx) bool {
+		go func() {
+			// one file for every command
+			filename := filepath.Join("statistics", ctx.Command.Name+".log")
+
+			// open statistics file to append call
+			file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+			if err != nil {
+				log.Printf("error opening statistics.log: %s\n", err)
+				return
+			}
+			defer file.Close()
+
+			// only save Arguments to statistics file
+			output := ctx.Arguments.Raw() + "\n"
+
+			if _, err = file.WriteString(output); err != nil {
+				log.Printf("Error writing string to statistics.log: %s\n", err)
+				return
+			}
+		}()
+		return true
 	})
 }

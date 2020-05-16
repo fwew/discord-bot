@@ -18,6 +18,7 @@ func registerCommands(router *dgc.Router) {
 		Usage:       fwew.Text("/randomUsage"),
 		Flags: []string{
 			"params",
+			"statistic",
 		},
 		IgnoreCase:  true,
 		SubCommands: nil,
@@ -79,6 +80,7 @@ func registerCommands(router *dgc.Router) {
 		Usage:       fwew.Text("/listUsage"),
 		Flags: []string{
 			"params",
+			"statistic",
 		},
 		IgnoreCase:  true,
 		SubCommands: nil,
@@ -113,6 +115,7 @@ func registerCommands(router *dgc.Router) {
 		Usage:       "fwew <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-l`: A locale word to translate",
 		Flags: []string{
 			"params",
+			"statistic",
 		},
 		IgnoreCase:  false,
 		SubCommands: nil,
@@ -154,6 +157,7 @@ func registerCommands(router *dgc.Router) {
 `,
 		Flags: []string{
 			"params",
+			"statistic",
 		},
 		IgnoreCase:  true,
 		SubCommands: nil,
