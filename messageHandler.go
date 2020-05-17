@@ -29,8 +29,30 @@ func sendEmbed(ctx *dgc.Ctx, title string, message string) *discordgo.Message {
 	return dcMessage
 }
 
+func sendEmbedImage(ctx *dgc.Ctx, imageURL string) {
+	// create embed to send
+	embed := &discordgo.MessageEmbed{
+		Author: &discordgo.MessageEmbedAuthor{
+			Name:    ctx.Event.Author.Username,
+			IconURL: ctx.Event.Author.AvatarURL("1024"),
+		},
+		Image: &discordgo.MessageEmbedImage{
+			URL: imageURL,
+			//Width:    0,
+			//Height:   0,
+		},
+		Color: 0x607CA3,
+	}
+
+	// send the Embed
+	_, err := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embed)
+	if err != nil {
+		log.Printf("Something went wrong sending message to discord: %s", err)
+	}
+}
+
 // Send the message to discord within the `fwew` layout of an embed.
-func sendDiscordMessage(ctx *dgc.Ctx, message string) {
+func sendDiscordMessageEmbed(ctx *dgc.Ctx, message string) {
 	// create title from executed command
 	title := ctx.Command.Name
 	arguments := ctx.Arguments.Raw()
@@ -88,6 +110,9 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	var output []string
 	var outTemp string
 	for _, worda := range words {
+		if len(worda) == 0 {
+			outTemp += fwew.Text("none")
+		}
 		for i, word := range worda {
 			line, err := word.ToOutputLine(
 				i,
@@ -99,7 +124,7 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 				ctx.CustomObjects["showSource"].(bool),
 			)
 			if err != nil {
-				sendDiscordMessage(ctx, fmt.Sprintf("Error creating output line: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error creating output line: %s", err))
 				return
 			}
 

@@ -62,7 +62,7 @@ func main() {
 
 		// The ping handler will be executed if the message only contains the bot's mention (no arguments)
 		PingHandler: func(ctx *dgc.Ctx) {
-			sendDiscordMessage(ctx, "Pong!")
+			sendDiscordMessageEmbed(ctx, "Pong!")
 		},
 	})
 

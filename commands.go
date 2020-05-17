@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Lukaesebrot/dgc"
 	fwew "github.com/fwew/fwew_lib"
+	"log"
 	"strconv"
 )
 
@@ -44,7 +45,7 @@ func registerCommands(router *dgc.Router) {
 				if amount == 0 {
 					amount, err = argument.AsInt()
 					if err != nil {
-						sendDiscordMessage(ctx, fmt.Sprintf("Argument is not a number: %s", err))
+						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Argument is not a number: %s", err))
 						return
 					}
 				}
@@ -61,7 +62,7 @@ func registerCommands(router *dgc.Router) {
 				// Get random words out of dictionary
 				words, err := fwew.Random(ctx.CustomObjects["langCode"].(string), amount, restArgs)
 				if err != nil {
-					sendDiscordMessage(ctx, fmt.Sprintf("Error getting random words: %s", err))
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err))
 					return
 				}
 
@@ -95,7 +96,7 @@ func registerCommands(router *dgc.Router) {
 
 			words, err := fwew.List(args, ctx.CustomObjects["langCode"].(string))
 			if err != nil {
-				sendDiscordMessage(ctx, fmt.Sprintf("Error executing list command: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err))
 				return
 			}
 
@@ -127,18 +128,47 @@ func registerCommands(router *dgc.Router) {
 			words := make([][]fwew.Word, amount)
 
 			langCode := ctx.CustomObjects["langCode"].(string)
+
+			var wordFound bool
+
 			// all params are words to search
 			for i, j := firstArg, 0; i < arguments.Amount(); i, j = i+1, j+1 {
+				arg := arguments.Get(i).Raw()
+
+				// hardcoded stuff override (will send an additional message)
+				if arg == "hrh" {
+					// KP "HRH" video
+					hrh := "https://youtu.be/-AgnLH7Dw3w?t=4m14s\n"
+					hrh += "> What would LOL be?\n"
+					hrh += "> It would have to do with the word herangham... maybe HRH"
+					sendDiscordMessageEmbed(ctx, hrh)
+					continue
+				}
+				if arg == "tunayayo" {
+					user, err := ctx.Session.User("277818358655877125")
+					if err != nil {
+						log.Printf("Error getting tunayayo user: %s", err)
+						continue
+					}
+					avatarURL := user.AvatarURL("2048")
+
+					sendEmbedImage(ctx, avatarURL)
+					continue
+				}
+
 				var navi []fwew.Word
 				if ctx.CustomObjects["reverse"].(bool) {
-					navi = fwew.TranslateToNavi(arguments.Get(i).Raw(), langCode)
+					navi = fwew.TranslateToNavi(arg, langCode)
 				} else {
-					navi = fwew.TranslateFromNavi(arguments.Get(i).Raw(), langCode)
+					navi = fwew.TranslateFromNavi(arg, langCode)
 				}
-				words[j] = append(words[j], navi...)
+				words[j] = navi
+				wordFound = true
 			}
 
-			sendWordDiscordEmbed(ctx, words)
+			if wordFound {
+				sendWordDiscordEmbed(ctx, words)
+			}
 		},
 	})
 
@@ -169,23 +199,23 @@ func registerCommands(router *dgc.Router) {
 				// It is an int, try to translate int
 				navi, err := fwew.NumberToNavi(int(argInt))
 				if err != nil {
-					sendDiscordMessage(ctx, fmt.Sprintf("Error writing number: %s", err))
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error writing number: %s", err))
 					return
 				}
 
-				sendDiscordMessage(ctx, navi)
+				sendDiscordMessageEmbed(ctx, navi)
 			} else {
 				// Try to translate from navi to number
 				number, err := fwew.NaviToNumber(argument.Raw())
 				if err != nil {
-					sendDiscordMessage(ctx, fmt.Sprintf("Error reading number: %s", err))
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error reading number: %s", err))
 					return
 				}
 
 				// Write string to print
 				output := fmt.Sprintf("Decimal: %d\nOctal: %#o", number, number)
 
-				sendDiscordMessage(ctx, output)
+				sendDiscordMessageEmbed(ctx, output)
 			}
 		},
 	})
@@ -205,7 +235,7 @@ func registerCommands(router *dgc.Router) {
 				"  - `-ipa`: Show IPA data\n" +
 				"  - `-s=false`: Dont show the dashed syllable stress"
 
-			sendDiscordMessage(ctx, info)
+			sendDiscordMessageEmbed(ctx, info)
 		},
 	})
 
@@ -215,7 +245,7 @@ func registerCommands(router *dgc.Router) {
 		Description: "Shows the current version of dict, api and bot.",
 		IgnoreCase:  true,
 		Handler: func(ctx *dgc.Ctx) {
-			sendDiscordMessage(ctx, Version.String())
+			sendDiscordMessageEmbed(ctx, Version.String())
 		},
 	})
 
@@ -230,9 +260,9 @@ func registerCommands(router *dgc.Router) {
 		Handler: func(ctx *dgc.Ctx) {
 			err := fwew.UpdateDict()
 			if err != nil {
-				sendDiscordMessage(ctx, fmt.Sprintf("Error updating the dictionary: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error updating the dictionary: %s", err))
 			} else {
-				sendDiscordMessage(ctx, "Updating dictionary successful")
+				sendDiscordMessageEmbed(ctx, "Updating dictionary successful")
 			}
 		},
 	})

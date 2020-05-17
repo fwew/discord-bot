@@ -60,7 +60,7 @@ func addMiddleware(router *dgc.Router) {
 
 		member, err := ctx.Session.State.Member(guild, author)
 		if err != nil {
-			sendDiscordMessage(ctx, fmt.Sprintf("Couldnt get member from guild: %s", err))
+			sendDiscordMessageEmbed(ctx, fmt.Sprintf("Couldnt get member from guild: %s", err))
 			return false
 		}
 
@@ -68,7 +68,7 @@ func addMiddleware(router *dgc.Router) {
 			if role == "396942792892481536" {
 				// user is allowed to do it!
 				log.Printf("User is allowed to do that :)")
-				sendDiscordMessage(ctx, "You are not allowed to use this command!")
+				sendDiscordMessageEmbed(ctx, "You are not allowed to use this command!")
 				return true
 			}
 		}
