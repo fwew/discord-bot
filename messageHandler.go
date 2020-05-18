@@ -38,8 +38,6 @@ func sendEmbedImage(ctx *dgc.Ctx, imageURL string) {
 		},
 		Image: &discordgo.MessageEmbedImage{
 			URL: imageURL,
-			//Width:    0,
-			//Height:   0,
 		},
 		Color: 0x607CA3,
 	}
