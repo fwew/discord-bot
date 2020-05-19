@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/Lukaesebrot/dgc"
-	fwew "github.com/fwew/fwew_lib"
+	fwew "github.com/fwew/fwew-lib"
 	"log"
 	"strconv"
 )

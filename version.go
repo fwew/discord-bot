@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	fwew "github.com/fwew/fwew_lib"
+	fwew "github.com/fwew/fwew-lib"
 )
 
 type version struct {

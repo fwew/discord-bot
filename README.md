@@ -10,7 +10,7 @@ This option is mostly for Contributors and Developers. Or people who like to com
 You will need the [GO Programming Language](https://golang.org/) and [Git](https://git-scm.com/) installed. 
 
 ### Setup
-We are using go modules so no GOPATH setup is needed.
+We are using go modules so no GOPATH setup is needed.  
 To compile the bot simply run:
 ```shell script
 cd ~/wherever/you/want
@@ -30,7 +30,7 @@ To run the Bot correctly, you have to put the `dictionary.txt` file in one of th
 - `./.fwew/` (into a .fwew directory, next to the executable)
 - `~/.fwew/` (into a .fwew directory in the home dir.)
 
-Dictionary can be downloaded from the [main repository](https://github.com/fwew/fwew_lib/tree/master/.fwew/dictionary.txt) or from [tireas Learnnavi page](https://tirea.learnnavi.org/dictionarydata/dictionary.txt)
+Dictionary can be downloaded from the [main repository](https://github.com/fwew/fwew-lib/tree/master/.fwew/dictionary.txt) or from [tireas Learnnavi page](https://tirea.learnnavi.org/dictionarydata/dictionary.txt)
 
 ### Misc
 To cross compile:

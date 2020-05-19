@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
-	fwew "github.com/fwew/fwew_lib"
+	fwew "github.com/fwew/fwew-lib"
 	"log"
 )
 
