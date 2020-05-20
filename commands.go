@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/Lukaesebrot/dgc"
 	fwew "github.com/fwew/fwew-lib"
+	"github.com/knoxfighter/dgc"
 	"log"
 	"strconv"
 )

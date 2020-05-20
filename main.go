@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 	fwew "github.com/fwew/fwew-lib"
+	"github.com/knoxfighter/dgc"
 	"io/ioutil"
 	"log"
 	"os"
@@ -70,7 +70,7 @@ func main() {
 
 	addMiddleware(router)
 
-	router.RegisterDefaultHelpCommand(session, nil)
+	router.RegisterDefaultHelpCommand(session, nil, 0xF1C40E)
 
 	router.Initialize(session)
 

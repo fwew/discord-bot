@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Lukaesebrot/dgc"
+	"github.com/knoxfighter/dgc"
 	"log"
 	"os"
 	"path/filepath"
