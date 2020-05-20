@@ -70,7 +70,7 @@ func main() {
 
 	addMiddleware(router)
 
-	router.RegisterDefaultHelpCommand(session)
+	router.RegisterDefaultHelpCommand(session, nil)
 
 	router.Initialize(session)
 

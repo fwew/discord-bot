@@ -115,11 +115,11 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 			line, err := word.ToOutputLine(
 				i,
 				true, // were discord-bot, always with markdown
-				ctx.CustomObjects["showIPA"].(bool),
-				ctx.CustomObjects["showInfix"].(bool),
-				ctx.CustomObjects["showDashed"].(bool),
-				ctx.CustomObjects["showInfixDots"].(bool),
-				ctx.CustomObjects["showSource"].(bool),
+				ctx.CustomObjects.MustGet("showIPA").(bool),
+				ctx.CustomObjects.MustGet("showInfix").(bool),
+				ctx.CustomObjects.MustGet("showDashed").(bool),
+				ctx.CustomObjects.MustGet("showInfixDots").(bool),
+				ctx.CustomObjects.MustGet("showSource").(bool),
 			)
 			if err != nil {
 				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error creating output line: %s", err))

@@ -17,6 +17,7 @@ func registerCommands(router *dgc.Router) {
 		},
 		Description: fwew.Text("/randomDesc"),
 		Usage:       fwew.Text("/randomUsage"),
+		Example:     fwew.Text("/randomExample"),
 		Flags: []string{
 			"params",
 			"statistic",
@@ -28,7 +29,7 @@ func registerCommands(router *dgc.Router) {
 
 			arguments := ctx.Arguments
 			if arguments.Amount() >= 1 {
-				firstArg := ctx.CustomObjects["firstArg"].(int)
+				firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
 
 				// only number argument
 				argument := arguments.Get(firstArg)
@@ -60,7 +61,7 @@ func registerCommands(router *dgc.Router) {
 				}
 
 				// Get random words out of dictionary
-				words, err := fwew.Random(ctx.CustomObjects["langCode"].(string), amount, restArgs)
+				words, err := fwew.Random(ctx.CustomObjects.MustGet("langCode").(string), amount, restArgs)
 				if err != nil {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err))
 					return
@@ -79,6 +80,7 @@ func registerCommands(router *dgc.Router) {
 		},
 		Description: fwew.Text("/listDesc"),
 		Usage:       fwew.Text("/listUsage"),
+		Example:     fwew.Text("/listExample"),
 		Flags: []string{
 			"params",
 			"statistic",
@@ -94,7 +96,7 @@ func registerCommands(router *dgc.Router) {
 				args = append(args, argument.Raw())
 			}
 
-			words, err := fwew.List(args, ctx.CustomObjects["langCode"].(string))
+			words, err := fwew.List(args, ctx.CustomObjects.MustGet("langCode").(string))
 			if err != nil {
 				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err))
 				return
@@ -114,6 +116,7 @@ func registerCommands(router *dgc.Router) {
 		},
 		Description: "Translate a word",
 		Usage:       "fwew <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-l`: A locale word to translate",
+		Example:     "fwew kaltxì",
 		Flags: []string{
 			"params",
 			"statistic",
@@ -123,11 +126,11 @@ func registerCommands(router *dgc.Router) {
 		Handler: func(ctx *dgc.Ctx) {
 			arguments := ctx.Arguments
 
-			firstArg := ctx.CustomObjects["firstArg"].(int)
+			firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
 			amount := arguments.Amount() - firstArg
 			words := make([][]fwew.Word, amount)
 
-			langCode := ctx.CustomObjects["langCode"].(string)
+			langCode := ctx.CustomObjects.MustGet("langCode").(string)
 
 			var wordFound bool
 
@@ -157,7 +160,7 @@ func registerCommands(router *dgc.Router) {
 				}
 
 				var navi []fwew.Word
-				if ctx.CustomObjects["reverse"].(bool) {
+				if ctx.CustomObjects.MustGet("reverse").(bool) {
 					navi = fwew.TranslateToNavi(arg, langCode)
 				} else {
 					navi = fwew.TranslateFromNavi(arg, langCode)
@@ -185,6 +188,7 @@ func registerCommands(router *dgc.Router) {
   - an octal number to translate to Na'vi
   - the Na'vi word of a number, to read the number
 `,
+		Example: "number 55",
 		Flags: []string{
 			"params",
 			"statistic",
@@ -193,7 +197,7 @@ func registerCommands(router *dgc.Router) {
 		SubCommands: nil,
 		Handler: func(ctx *dgc.Ctx) {
 			arguments := ctx.Arguments
-			argument := arguments.Get(ctx.CustomObjects["firstArg"].(int))
+			argument := arguments.Get(ctx.CustomObjects.MustGet("firstArg").(int))
 			argInt, err := strconv.ParseInt(argument.Raw(), 8, 16)
 			if err == nil {
 				// It is an int, try to translate int

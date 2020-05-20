@@ -15,13 +15,13 @@ func addMiddleware(router *dgc.Router) {
 		amount := ctx.Arguments.Amount()
 
 		// set up default values of params
-		ctx.CustomObjects["langCode"] = "en"
-		ctx.CustomObjects["reverse"] = false      // translate from navi to locale
-		ctx.CustomObjects["showInfix"] = false    // dont show Infix data
-		ctx.CustomObjects["showInfixDots"] = true // dont show infix data dotted
-		ctx.CustomObjects["showSource"] = false   // dont show source
-		ctx.CustomObjects["showDashed"] = true    // dont show syllable stress
-		ctx.CustomObjects["showIPA"] = false      // dont show IPA data
+		ctx.CustomObjects.Set("langCode", "en")
+		ctx.CustomObjects.Set("reverse", false)      // translate from navi to locale
+		ctx.CustomObjects.Set("showInfix", false)    // dont show Infix data
+		ctx.CustomObjects.Set("showInfixDots", true) // dont show infix data dotted
+		ctx.CustomObjects.Set("showSource", false)   // dont show source
+		ctx.CustomObjects.Set("showDashed", true)    // dont show syllable stress
+		ctx.CustomObjects.Set("showIPA", false)      // dont show IPA data
 
 		// read the real values from the user input
 		for i := 0; i < amount; i++ {
@@ -29,23 +29,23 @@ func addMiddleware(router *dgc.Router) {
 			arg := argument.Raw()
 			if arg == "-r" {
 				// mark as reverse (local to navi)
-				ctx.CustomObjects["reverse"] = true
+				ctx.CustomObjects.Set("reverse", true)
 			} else if strings.HasPrefix(arg, "-l=") {
-				ctx.CustomObjects["langCode"] = strings.TrimPrefix(arg, "-l=")
+				ctx.CustomObjects.Set("langCode", strings.TrimPrefix(arg, "-l="))
 			} else if arg == "-i" {
-				ctx.CustomObjects["showInfix"] = true
+				ctx.CustomObjects.Set("showInfix", true)
 			} else if arg == "-id=false" {
-				ctx.CustomObjects["showInfixDots"] = false
+				ctx.CustomObjects.Set("showInfixDots", false)
 			} else if arg == "-src" {
-				ctx.CustomObjects["showSource"] = true
+				ctx.CustomObjects.Set("showSource", true)
 			} else if arg == "-ipa" {
-				ctx.CustomObjects["showIPA"] = true
+				ctx.CustomObjects.Set("showIPA", true)
 			} else if arg == "-s=false" {
-				ctx.CustomObjects["showDashed"] = false
+				ctx.CustomObjects.Set("showDashed", false)
 			} else if strings.HasPrefix(arg, "-") {
 				// ignore every other parameter
 			} else {
-				ctx.CustomObjects["firstArg"] = i
+				ctx.CustomObjects.Set("firstArg", i)
 				break
 			}
 		}
