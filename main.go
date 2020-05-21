@@ -14,7 +14,8 @@ import (
 )
 
 type Config struct {
-	Token string `json:"token"`
+	Token    string   `json:"token"`
+	Prefixes []string `json:"prefixes"`
 }
 
 var config Config
@@ -51,10 +52,7 @@ func main() {
 
 	// generate a command router
 	router := dgc.Create(&dgc.Router{
-		Prefixes: []string{
-			"$",
-			"<@!" + session.State.User.ID + ">",
-		},
+		Prefixes:         append(config.Prefixes, "<@!"+session.State.User.ID+">"),
 		IgnorePrefixCase: true,
 		BotsAllowed:      false,
 		Commands:         []*dgc.Command{},
