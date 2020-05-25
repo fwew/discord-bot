@@ -32,6 +32,12 @@ func main() {
 		panic(err)
 	}
 
+	// Assure Dict, before caching it
+	err = fwew.AssureDict()
+	if err != nil {
+		panic(err)
+	}
+
 	// cache fwew dictionary
 	err = fwew.CacheDict()
 	if err != nil {
