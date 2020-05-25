@@ -18,5 +18,5 @@ var Version = version{
 }
 
 func (v *version) String() string {
-	return fmt.Sprintf("Bot: %d.%d.%d-%s \"%s\"\n%s", v.Major, v.Minor, v.Patch, v.Label, v.Name, fwew.Version.String())
+	return fmt.Sprintf("discord bot: %d.%d.%d-%s \"%s\"\n%s", v.Major, v.Minor, v.Patch, v.Label, v.Name, fwew.Version.String())
 }
