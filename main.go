@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
-	fwew "github.com/fwew/fwew-lib"
+	fwew "github.com/fwew/fwew-lib/v5"
 	"github.com/knoxfighter/dgc"
 	"io/ioutil"
 	"log"
