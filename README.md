@@ -41,5 +41,6 @@ GOOS=windows go build -o bin/windows/fwew.exe ./...
 ```
 
 ## Statistics
-The bot by itself will create anonymized statistics, about the calls to each call inside the statistics directory.
+The bot by itself will create anonymized statistics, about each call to the bot inside the statistics directory.
 These statistics only save, what Parameters were used per command. Each command has its own file where it is saved.
+The statistics directory will automatically be created next to the executable.
