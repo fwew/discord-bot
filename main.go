@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 )
 
@@ -19,6 +20,21 @@ type Config struct {
 }
 
 var config Config
+var statisticsDir string
+
+func init() {
+	// get working dir
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	statisticsDir = filepath.Join(wd, "statistics")
+
+	// assure statistics directory next to the executable
+	if _, err := os.Stat(statisticsDir); os.IsNotExist(err) {
+		os.Mkdir(statisticsDir, os.ModeDir|0o755)
+	}
+}
 
 func main() {
 	// load json config

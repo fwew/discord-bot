@@ -80,7 +80,7 @@ func addMiddleware(router *dgc.Router) {
 	router.AddMiddleware("statistic", func(ctx *dgc.Ctx) bool {
 		go func() {
 			// one file for every command
-			filename := filepath.Join("statistics", ctx.Command.Name+".log")
+			filename := filepath.Join(statisticsDir, ctx.Command.Name+".log")
 
 			// open statistics file to append call
 			file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
@@ -94,7 +94,7 @@ func addMiddleware(router *dgc.Router) {
 			output := ctx.Arguments.Raw() + "\n"
 
 			if _, err = file.WriteString(output); err != nil {
-				log.Printf("Error writing string to statistics.log: %s\n", err)
+				log.Printf("Error writing string to statistics log: %s\n", err)
 				return
 			}
 		}()
