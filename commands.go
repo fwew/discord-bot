@@ -61,7 +61,7 @@ func registerCommands(router *dgc.Router) {
 				}
 
 				// Get random words out of dictionary
-				words, err := fwew.Random(ctx.CustomObjects.MustGet("langCode").(string), amount, restArgs)
+				words, err := fwew.Random(amount, restArgs)
 				if err != nil {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err))
 					return
@@ -96,7 +96,7 @@ func registerCommands(router *dgc.Router) {
 				args = append(args, argument.Raw())
 			}
 
-			words, err := fwew.List(args, ctx.CustomObjects.MustGet("langCode").(string))
+			words, err := fwew.List(args)
 			if err != nil {
 				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err))
 				return
@@ -163,7 +163,11 @@ func registerCommands(router *dgc.Router) {
 				if ctx.CustomObjects.MustGet("reverse").(bool) {
 					navi = fwew.TranslateToNavi(arg, langCode)
 				} else {
-					navi = fwew.TranslateFromNavi(arg, langCode)
+					var err error
+					navi, err = fwew.TranslateFromNavi(arg)
+					if err != nil {
+						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err))
+					}
 				}
 				words[j] = navi
 				wordFound = true
@@ -226,12 +230,14 @@ func registerCommands(router *dgc.Router) {
 
 	// just a command to show how to use parameters
 	router.RegisterCmd(&dgc.Command{
-		Name:        "params",
-		Aliases:     nil,
+		Name: "params",
+		Aliases: []string{
+			"param",
+		},
 		Description: "Show information about the params, that can be used with \"fwew\", \"list\" and \"random\"",
 		Handler: func(ctx *dgc.Ctx) {
 			info := "`fwew`, `list` and `random` can have additional optional parameters.\n" +
-				"  - `-l=<langCode>`: Set the language\n" +
+				"  - `-l=<langCode>`: Set the language (de, en, et, fr, hu, nl, pl, ru, sv). Default: en\n" +
 				"  - `-r`: `fwew` only param, that will mark the translation \"reversed\". If set, translation will be from locale to Na'vi\n" +
 				"  - `-i`: Show Infix locations with brackets\n" +
 				"  - `-id=false`: Dont show infix dots\n" +

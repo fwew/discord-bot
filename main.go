@@ -15,8 +15,9 @@ import (
 )
 
 type Config struct {
-	Token    string   `json:"token"`
-	Prefixes []string `json:"prefixes"`
+	Token     string   `json:"token"`
+	Prefixes  []string `json:"prefixes"`
+	AdminRole string   `json:"admin_role"`
 }
 
 var config Config
@@ -78,7 +79,7 @@ func main() {
 		IgnorePrefixCase: true,
 		BotsAllowed:      false,
 		Commands:         []*dgc.Command{},
-		Middlewares:      map[string][]dgc.Middleware{},
+		//Middlewares:      []dgc.Middleware{},
 
 		// The ping handler will be executed if the message only contains the bot's mention (no arguments)
 		PingHandler: func(ctx *dgc.Ctx) {

@@ -2,5 +2,6 @@
   "token": "",
   "prefixes": [
     "$"
-  ]
+  ],
+  "admin_role": ""
 }
