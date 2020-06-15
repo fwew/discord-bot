@@ -87,7 +87,7 @@ func addMiddleware(router *dgc.Router) {
 
 			member, err := ctx.Session.State.Member(guild, author)
 			if err != nil {
-				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Couldnt get member from guild: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Couldnt get member from guild: %s", err), true)
 				return
 			}
 
@@ -100,7 +100,7 @@ func addMiddleware(router *dgc.Router) {
 				}
 			}
 
-			sendDiscordMessageEmbed(ctx, "You are not allowed to use this command!")
+			sendDiscordMessageEmbed(ctx, "You are not allowed to use this command!", true)
 			return
 		}
 	})

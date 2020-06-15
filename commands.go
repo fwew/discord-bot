@@ -25,6 +25,12 @@ func registerCommands(router *dgc.Router) {
 		IgnoreCase:  true,
 		SubCommands: nil,
 		Handler: func(ctx *dgc.Ctx) {
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
 			var err error
 
 			arguments := ctx.Arguments
@@ -46,7 +52,7 @@ func registerCommands(router *dgc.Router) {
 				if amount == 0 {
 					amount, err = argument.AsInt()
 					if err != nil {
-						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Argument is not a number: %s", err))
+						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Argument is not a number: %s", err), true)
 						return
 					}
 				}
@@ -63,7 +69,7 @@ func registerCommands(router *dgc.Router) {
 				// Get random words out of dictionary
 				words, err := fwew.Random(amount, restArgs)
 				if err != nil {
-					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err))
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err), true)
 					return
 				}
 
@@ -88,8 +94,15 @@ func registerCommands(router *dgc.Router) {
 		IgnoreCase:  true,
 		SubCommands: nil,
 		Handler: func(ctx *dgc.Ctx) {
-			// get all arguments as array
 			var args []string
+
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
+			// get all arguments as array
 			arguments := ctx.Arguments
 			for i := 0; i < arguments.Amount(); i++ {
 				argument := arguments.Get(i)
@@ -98,7 +111,7 @@ func registerCommands(router *dgc.Router) {
 
 			words, err := fwew.List(args)
 			if err != nil {
-				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err), true)
 				return
 			}
 
@@ -126,6 +139,12 @@ func registerCommands(router *dgc.Router) {
 		Handler: func(ctx *dgc.Ctx) {
 			arguments := ctx.Arguments
 
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
 			firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
 			amount := arguments.Amount() - firstArg
 			words := make([][]fwew.Word, amount)
@@ -144,7 +163,7 @@ func registerCommands(router *dgc.Router) {
 					hrh := "https://youtu.be/-AgnLH7Dw3w?t=4m14s\n"
 					hrh += "> What would LOL be?\n"
 					hrh += "> It would have to do with the word herangham... maybe HRH"
-					sendDiscordMessageEmbed(ctx, hrh)
+					sendDiscordMessageEmbed(ctx, hrh, false)
 					continue
 				}
 				if arg == "tunayayo" {
@@ -166,7 +185,7 @@ func registerCommands(router *dgc.Router) {
 					var err error
 					navi, err = fwew.TranslateFromNavi(arg)
 					if err != nil {
-						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err))
+						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 					}
 				}
 				words[j] = navi
@@ -200,6 +219,12 @@ func registerCommands(router *dgc.Router) {
 		IgnoreCase:  true,
 		SubCommands: nil,
 		Handler: func(ctx *dgc.Ctx) {
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
 			arguments := ctx.Arguments
 			argument := arguments.Get(ctx.CustomObjects.MustGet("firstArg").(int))
 			argInt, err := strconv.ParseInt(argument.Raw(), 8, 16)
@@ -207,23 +232,23 @@ func registerCommands(router *dgc.Router) {
 				// It is an int, try to translate int
 				navi, err := fwew.NumberToNavi(int(argInt))
 				if err != nil {
-					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error writing number: %s", err))
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error writing number: %s", err), true)
 					return
 				}
 
-				sendDiscordMessageEmbed(ctx, navi)
+				sendDiscordMessageEmbed(ctx, navi, false)
 			} else {
 				// Try to translate from navi to number
 				number, err := fwew.NaviToNumber(argument.Raw())
 				if err != nil {
-					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error reading number: %s", err))
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error reading number: %s", err), true)
 					return
 				}
 
 				// Write string to print
 				output := fmt.Sprintf("Decimal: %d\nOctal: %#o", number, number)
 
-				sendDiscordMessageEmbed(ctx, output)
+				sendDiscordMessageEmbed(ctx, output, false)
 			}
 		},
 	})
@@ -245,7 +270,7 @@ func registerCommands(router *dgc.Router) {
 				"  - `-ipa`: Show IPA data\n" +
 				"  - `-s=false`: Dont show the dashed syllable stress"
 
-			sendDiscordMessageEmbed(ctx, info)
+			sendDiscordMessageEmbed(ctx, info, false)
 		},
 	})
 
@@ -255,7 +280,7 @@ func registerCommands(router *dgc.Router) {
 		Description: "Shows the current version of dict, api and bot.",
 		IgnoreCase:  true,
 		Handler: func(ctx *dgc.Ctx) {
-			sendDiscordMessageEmbed(ctx, Version.String())
+			sendDiscordMessageEmbed(ctx, Version.String(), false)
 		},
 	})
 
@@ -268,11 +293,17 @@ func registerCommands(router *dgc.Router) {
 			"admin",
 		},
 		Handler: func(ctx *dgc.Ctx) {
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
 			err := fwew.UpdateDict()
 			if err != nil {
-				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error updating the dictionary: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error updating the dictionary: %s", err), true)
 			} else {
-				sendDiscordMessageEmbed(ctx, "Updating dictionary successful")
+				sendDiscordMessageEmbed(ctx, "Updating dictionary successful", false)
 			}
 		},
 	})

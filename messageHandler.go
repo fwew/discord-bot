@@ -6,9 +6,18 @@ import (
 	fwew "github.com/fwew/fwew-lib/v5"
 	"github.com/knoxfighter/dgc"
 	"log"
+	"runtime/debug"
 )
 
-func sendEmbed(ctx *dgc.Ctx, title string, message string) *discordgo.Message {
+func sendEmbed(ctx *dgc.Ctx, title string, message string, isErr bool) *discordgo.Message {
+	// set color to use
+	var color int
+	if isErr {
+		color = 0xFF0000
+	} else {
+		color = 0x607CA3
+	}
+
 	// create embed to send
 	embed := &discordgo.MessageEmbed{
 		Author: &discordgo.MessageEmbedAuthor{
@@ -16,7 +25,7 @@ func sendEmbed(ctx *dgc.Ctx, title string, message string) *discordgo.Message {
 			IconURL: ctx.Event.Author.AvatarURL("1024"),
 		},
 		Title:       title,
-		Color:       0x607CA3,
+		Color:       color,
 		Description: message,
 	}
 
@@ -50,7 +59,7 @@ func sendEmbedImage(ctx *dgc.Ctx, imageURL string) {
 }
 
 // Send the message to discord within the `fwew` layout of an embed.
-func sendDiscordMessageEmbed(ctx *dgc.Ctx, message string) {
+func sendDiscordMessageEmbed(ctx *dgc.Ctx, message string, isErr bool) {
 	// create title from executed command
 	title := ctx.Command.Name
 	arguments := ctx.Arguments.Raw()
@@ -58,7 +67,7 @@ func sendDiscordMessageEmbed(ctx *dgc.Ctx, message string) {
 		title += " " + arguments
 	}
 
-	sendEmbed(ctx, title, message)
+	sendEmbed(ctx, title, message, isErr)
 }
 
 type message struct {
@@ -85,7 +94,7 @@ func sendDiscordMessagePaginated(ctx *dgc.Ctx, pages []string) {
 	}
 
 	// post first page
-	dcMessage := sendEmbed(ctx, title, pages[0])
+	dcMessage := sendEmbed(ctx, title, pages[0], false)
 	session := ctx.Session
 
 	if len(pages) > 1 {
@@ -123,7 +132,7 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 				ctx.CustomObjects.MustGet("langCode").(string),
 			)
 			if err != nil {
-				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error creating output line: %s", err))
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error creating output line: %s", err), true)
 				return
 			}
 
@@ -139,4 +148,12 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	// add last outTemp also
 	output = append(output, outTemp)
 	sendDiscordMessagePaginated(ctx, output)
+}
+
+func sendErrorWhenRecovered(ctx *dgc.Ctx) {
+	sendDiscordMessageEmbed(
+		ctx,
+		fmt.Sprintf("PANIC!! Please repot this error.\ncommand: %s\nargs: %s\nstacktrace: %s", ctx.Command.Name, ctx.Arguments.Raw(), debug.Stack()),
+		true,
+	)
 }
