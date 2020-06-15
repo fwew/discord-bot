@@ -37,6 +37,12 @@ func init() {
 	}
 }
 
+func removeAllReactions(session *discordgo.Session) {
+	for _, m := range messages {
+		session.MessageReactionsRemoveAll(m.message.ChannelID, m.message.ID)
+	}
+}
+
 func main() {
 	// load json config
 	jsonFile, err := ioutil.ReadFile("conf.json")
@@ -148,6 +154,9 @@ func main() {
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
+
+	// cleanup pagination reactions
+	removeAllReactions(session)
 
 	// Cleanly close down the Discord session.
 	session.Close()
