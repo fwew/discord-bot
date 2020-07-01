@@ -9,6 +9,27 @@ import (
 	"strings"
 )
 
+func setDefaultLanguage(ctx *dgc.Ctx) {
+	switch ctx.Event.ChannelID {
+	case "398213699552411648": // #lerngruppe
+		fallthrough
+	case "298701183898484737": // #deutsch
+		fallthrough
+	case "706593256435351662": // #lerngruppe-übungsraum
+		ctx.CustomObjects.Set("langCode", "de")
+	case "466721683496239105": // #nederlands
+		ctx.CustomObjects.Set("langCode", "nl")
+	case "649363324143665192": // #polski
+		ctx.CustomObjects.Set("langCode", "pl")
+	case "507306946190114846": // #русский
+		ctx.CustomObjects.Set("langCode", "ru")
+	case "365987412163297284": // #français
+		ctx.CustomObjects.Set("langCode", "fr")
+	default:
+		ctx.CustomObjects.Set("langCode", "de")
+	}
+}
+
 func addMiddleware(router *dgc.Router) {
 	// add middleware to parse additional params (-r -l=de and more)
 	router.RegisterMiddleware(dgc.Middleware(func(following dgc.ExecutionHandler) dgc.ExecutionHandler {
@@ -28,7 +49,7 @@ func addMiddleware(router *dgc.Router) {
 			amount := ctx.Arguments.Amount()
 
 			// set up default values of params
-			ctx.CustomObjects.Set("langCode", "en")
+			setDefaultLanguage(ctx)
 			ctx.CustomObjects.Set("reverse", false)      // translate from navi to locale
 			ctx.CustomObjects.Set("showInfix", false)    // dont show Infix data
 			ctx.CustomObjects.Set("showInfixDots", true) // dont show infix data dotted
