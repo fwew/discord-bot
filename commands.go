@@ -107,9 +107,11 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
+			firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
+
 			// get all arguments as array
 			arguments := ctx.Arguments
-			for i := 0; i < arguments.Amount(); i++ {
+			for i := firstArg; i < arguments.Amount(); i++ {
 				argument := arguments.Get(i)
 				args = append(args, argument.Raw())
 			}
@@ -169,7 +171,9 @@ func registerCommands(router *dgc.Router) {
 						case "/random":
 							random(arguments, firstArg+1, ctx)
 						case "/list":
+
 						case "/version":
+							sendDiscordMessageEmbed(ctx, Version.String(), false)
 						default:
 							// unknown command error
 						}
