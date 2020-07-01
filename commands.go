@@ -6,7 +6,50 @@ import (
 	"github.com/knoxfighter/dgc"
 	"log"
 	"strconv"
+	"strings"
 )
+
+func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
+	var err error
+
+	// only number argument
+	argument := arguments.Get(firstArg)
+
+	var amount int
+
+	// if argument is "random" create a random number to run on dict
+	argString := argument.Raw()
+	if argString == "random" {
+		amount = -1
+	}
+
+	// If command is not random (amount = 0) get the given number
+	if amount == 0 {
+		amount, err = argument.AsInt()
+		if err != nil {
+			sendDiscordMessageEmbed(ctx, fmt.Sprintf("Argument [%s] is not a number: %s", argString, err), true)
+			return
+		}
+	}
+
+	// rest of the arguments are the filters, if second one is "where"
+	var restArgs []string
+	whereArg := arguments.Get(firstArg + 1)
+	if whereArg.Raw() == "where" {
+		for i := firstArg + 2; i < arguments.Amount(); i++ {
+			restArgs = append(restArgs, arguments.Get(i).Raw())
+		}
+	}
+
+	// Get random words out of dictionary
+	words, err := fwew.Random(amount, restArgs)
+	if err != nil {
+		sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err), true)
+		return
+	}
+
+	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+}
 
 func registerCommands(router *dgc.Router) {
 	// Random command
@@ -31,49 +74,11 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
-			var err error
-
 			arguments := ctx.Arguments
 			if arguments.Amount() >= 1 {
 				firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
 
-				// only number argument
-				argument := arguments.Get(firstArg)
-
-				var amount int
-
-				// if argument is "random" create a random number to run on dict
-				argString := argument.Raw()
-				if argString == "random" {
-					amount = -1
-				}
-
-				// If command is not random (amount = 0) get the given number
-				if amount == 0 {
-					amount, err = argument.AsInt()
-					if err != nil {
-						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Argument is not a number: %s", err), true)
-						return
-					}
-				}
-
-				// rest of the arguments are the filters, if second one is "where"
-				var restArgs []string
-				whereArg := arguments.Get(firstArg + 1)
-				if whereArg.Raw() == "where" {
-					for i := 2; i < arguments.Amount(); i++ {
-						restArgs = append(restArgs, arguments.Get(i).Raw())
-					}
-				}
-
-				// Get random words out of dictionary
-				words, err := fwew.Random(amount, restArgs)
-				if err != nil {
-					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err), true)
-					return
-				}
-
-				sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+				random(arguments, firstArg, ctx)
 			}
 		},
 	})
@@ -156,6 +161,22 @@ func registerCommands(router *dgc.Router) {
 			// all params are words to search
 			for i, j := firstArg, 0; i < arguments.Amount(); i, j = i+1, j+1 {
 				arg := arguments.Get(i).Raw()
+
+				// on first arg, check if this is a known command and fwew-bot is used like the old version
+				if j == 0 {
+					if strings.HasPrefix(arg, "/") {
+						switch arg {
+						case "/random":
+							random(arguments, firstArg+1, ctx)
+						case "/list":
+						case "/version":
+						default:
+							// unknown command error
+						}
+
+						break
+					}
+				}
 
 				// hardcoded stuff override (will send an additional message)
 				if arg == "hrh" {
