@@ -51,6 +51,25 @@ func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
 	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
 }
 
+func list(ctx *dgc.Ctx, firstArg int) {
+	var args []string
+
+	// get all arguments as array
+	arguments := ctx.Arguments
+	for i := firstArg; i < arguments.Amount(); i++ {
+		argument := arguments.Get(i)
+		args = append(args, argument.Raw())
+	}
+
+	words, err := fwew.List(args)
+	if err != nil {
+		sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err), true)
+		return
+	}
+
+	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+}
+
 func registerCommands(router *dgc.Router) {
 	// Random command
 	router.RegisterCmd(&dgc.Command{
@@ -99,8 +118,6 @@ func registerCommands(router *dgc.Router) {
 		IgnoreCase:  true,
 		SubCommands: nil,
 		Handler: func(ctx *dgc.Ctx) {
-			var args []string
-
 			defer func() {
 				if err := recover(); err != nil {
 					sendErrorWhenRecovered(ctx)
@@ -108,21 +125,7 @@ func registerCommands(router *dgc.Router) {
 			}()
 
 			firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
-
-			// get all arguments as array
-			arguments := ctx.Arguments
-			for i := firstArg; i < arguments.Amount(); i++ {
-				argument := arguments.Get(i)
-				args = append(args, argument.Raw())
-			}
-
-			words, err := fwew.List(args)
-			if err != nil {
-				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err), true)
-				return
-			}
-
-			sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+			list(ctx, firstArg)
 		},
 	})
 
@@ -171,11 +174,12 @@ func registerCommands(router *dgc.Router) {
 						case "/random":
 							random(arguments, firstArg+1, ctx)
 						case "/list":
-
+							list(ctx, firstArg+1)
 						case "/version":
 							sendDiscordMessageEmbed(ctx, Version.String(), false)
 						default:
 							// unknown command error
+							sendEmbed(ctx, ctx.Command.Name, "I dont know this subcommand :(", true)
 						}
 
 						break
