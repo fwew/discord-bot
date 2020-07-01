@@ -36,6 +36,7 @@ func addMiddleware(router *dgc.Router) {
 			ctx.CustomObjects.Set("showDashed", true)    // dont show syllable stress
 			ctx.CustomObjects.Set("showIPA", false)      // dont show IPA data
 
+			var nextLanguage, nextInfixDots, nextDashed bool
 			// read the real values from the user input
 			for i := 0; i < amount; i++ {
 				argument := ctx.Arguments.Get(i)
@@ -45,18 +46,44 @@ func addMiddleware(router *dgc.Router) {
 					ctx.CustomObjects.Set("reverse", true)
 				} else if strings.HasPrefix(arg, "-l=") {
 					ctx.CustomObjects.Set("langCode", strings.TrimPrefix(arg, "-l="))
+				} else if arg == "-l" {
+					// next arg is language code
+					nextLanguage = true
 				} else if arg == "-i" {
 					ctx.CustomObjects.Set("showInfix", true)
 				} else if arg == "-id=false" {
 					ctx.CustomObjects.Set("showInfixDots", false)
+				} else if arg == "-id" {
+					// next is infix dots
+					nextInfixDots = true
 				} else if arg == "-src" {
 					ctx.CustomObjects.Set("showSource", true)
 				} else if arg == "-ipa" {
 					ctx.CustomObjects.Set("showIPA", true)
 				} else if arg == "-s=false" {
 					ctx.CustomObjects.Set("showDashed", false)
+				} else if arg == "-s" {
+					// next is dashed
+					nextDashed = true
 				} else if strings.HasPrefix(arg, "-") {
 					// ignore every other parameter
+				} else if nextLanguage {
+					ctx.CustomObjects.Set("langCode", arg)
+					nextLanguage = false
+				} else if nextInfixDots {
+					if arg == "true" {
+						ctx.CustomObjects.Set("showInfixDots", true)
+					} else if arg == "false" {
+						ctx.CustomObjects.Set("showInfixDots", false)
+					}
+					nextInfixDots = false
+				} else if nextDashed {
+					if arg == "true" {
+						ctx.CustomObjects.Set("showDashed", true)
+					} else if arg == "false" {
+						ctx.CustomObjects.Set("showDashed", false)
+					}
+					nextDashed = false
 				} else {
 					ctx.CustomObjects.Set("firstArg", i)
 					break
