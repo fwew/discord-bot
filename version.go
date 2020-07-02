@@ -11,7 +11,7 @@ type version struct {
 }
 
 var Version = version{
-	1, 1, 0,
+	1, 1, 1,
 	"dev",
 }
 
