@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 )
 
@@ -146,6 +147,51 @@ func main() {
 
 			// Remove the reaction
 			session.MessageReactionRemove(event.ChannelID, event.MessageID, reactionName, event.UserID)
+		}
+	})
+
+	// Add handler for private chat
+	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
+		// do not run on my own messages!
+		if message.Author.Bot {
+			return
+		}
+
+		// if in private chat
+		channel, err := session.State.Channel(message.ChannelID)
+		if err != nil {
+			if channel, err = session.Channel(message.ChannelID); err != nil {
+				return
+			}
+		}
+
+		if channel.Type == discordgo.ChannelTypeDM {
+			// only run if message not starts with prefix
+			for _, prefix := range router.Prefixes {
+				if strings.HasPrefix(message.Message.Content, prefix) {
+					return
+				}
+			}
+
+			var fwewCommand *dgc.Command
+			for _, command := range router.Commands {
+				if command.Name == "fwew" {
+					fwewCommand = command
+					break
+				}
+			}
+
+			// use this message as params
+			context := &dgc.Ctx{
+				Session:       session,
+				Event:         message,
+				Arguments:     dgc.ParseArguments(message.Content),
+				CustomObjects: dgc.NewObjectsMap(),
+				Router:        router,
+				Command:       fwewCommand,
+			}
+
+			fwewCommand.Trigger(context)
 		}
 	})
 
