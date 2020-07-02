@@ -13,10 +13,6 @@ github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoA
 github.com/jung-kurt/gofpdf v1.0.3-0.20190309125859-24315acbbda5/go.mod h1:7Id9E/uU8ce6rXgefFLlgrJj/GYY22cpxn+r32jIOes=
 github.com/karrick/tparse/v2 v2.8.1 h1:KmuwSutle9SVDQceHWr1IixyMZ0RSctDP/OB+OhqMNs=
 github.com/karrick/tparse/v2 v2.8.1/go.mod h1:OzmKMqNal7LYYHaO/Ie1f/wXmLWAaGKwJmxUFNQCVxg=
-github.com/knoxfighter/dgc v0.0.0-20200609222343-390fedffd7f8 h1:qnWd5kL/+vDehZN0j8OxAJyw+hYoQDlMwAATg5NsK94=
-github.com/knoxfighter/dgc v0.0.0-20200609222343-390fedffd7f8/go.mod h1:6PfvhP7FwM16I+wx7MKSh/BNYhG725YtKC5rqydxPmE=
-github.com/knoxfighter/dgc v0.0.0-20200702030510-f242ce4379f1 h1:/lEKNdJ4CXzgPzhj4f6wf0ACNAauOKJklKWVXBCyvAY=
-github.com/knoxfighter/dgc v0.0.0-20200702030510-f242ce4379f1/go.mod h1:6PfvhP7FwM16I+wx7MKSh/BNYhG725YtKC5rqydxPmE=
 github.com/knoxfighter/dgc v0.0.0-20200702032554-f77499662963 h1:tVxtXDFf6sXdO9KYdToVvTyExfoUSucuTnrpxSyQtTk=
 github.com/knoxfighter/dgc v0.0.0-20200702032554-f77499662963/go.mod h1:6PfvhP7FwM16I+wx7MKSh/BNYhG725YtKC5rqydxPmE=
 github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
