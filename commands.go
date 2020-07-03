@@ -161,6 +161,7 @@ func registerCommands(router *dgc.Router) {
 				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
 				return
 			}
+
 			firstArg := firstArgTemp.(int)
 			amount := arguments.Amount() - firstArg
 			words := make([][]fwew.Word, amount)
