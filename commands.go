@@ -155,7 +155,13 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
-			firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
+			// Dont run if firstArg is not set (we have nothing to do in that case)
+			firstArgTemp, b := ctx.CustomObjects.Get("firstArg")
+			if !b {
+				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
+				return
+			}
+			firstArg := firstArgTemp.(int)
 			amount := arguments.Amount() - firstArg
 			words := make([][]fwew.Word, amount)
 
