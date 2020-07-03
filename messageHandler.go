@@ -153,7 +153,7 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 func sendErrorWhenRecovered(ctx *dgc.Ctx) {
 	sendDiscordMessageEmbed(
 		ctx,
-		fmt.Sprintf("PANIC!! Please repot this error.\ncommand: %s\nargs: %s\nstacktrace: %s", ctx.Command.Name, ctx.Arguments.Raw(), debug.Stack()),
+		fmt.Sprintf("PANIC!! Please report this error.\ncommand: %s\nargs: %s\nstacktrace: %s", ctx.Command.Name, ctx.Arguments.Raw(), debug.Stack()),
 		true,
 	)
 }

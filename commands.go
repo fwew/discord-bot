@@ -138,7 +138,7 @@ func registerCommands(router *dgc.Router) {
 			"trans",
 		},
 		Description: "Translate a word",
-		Usage:       "fwew <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-l`: A locale word to translate",
+		Usage:       "fwew <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
 		Example:     "fwew kaltxì",
 		Flags: []string{
 			"params",
