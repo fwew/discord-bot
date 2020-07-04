@@ -360,7 +360,7 @@ func registerCommands(router *dgc.Router) {
 			for _, lenition := range lenitionTable {
 				output += "" + lenition[0]
 				for i := len(lenition[0]); i < leftSize; i++ {
-					output += "\u2002"
+					output += " "
 				}
 				if lenition[1] == "" {
 					lenition[1] = "(disappears)"
