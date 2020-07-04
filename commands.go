@@ -70,6 +70,25 @@ func list(ctx *dgc.Ctx, firstArg int) {
 	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
 }
 
+func lenition(ctx *dgc.Ctx) {
+	lenitionTable := fwew.GetLenitionTable()
+	const leftSize = 3
+	var output string
+	output += "```\n"
+	for _, lenition := range lenitionTable {
+		output += "" + lenition[0]
+		for i := len(lenition[0]); i < leftSize; i++ {
+			output += " "
+		}
+		if lenition[1] == "" {
+			lenition[1] = "(disappears)"
+		}
+		output += "→ " + lenition[1] + "\n"
+	}
+	output += "```"
+	sendDiscordMessageEmbed(ctx, output, false)
+}
+
 func registerCommands(router *dgc.Router) {
 	// Random command
 	router.RegisterCmd(&dgc.Command{
@@ -184,6 +203,8 @@ func registerCommands(router *dgc.Router) {
 							list(ctx, firstArg+1)
 						case "/version":
 							sendDiscordMessageEmbed(ctx, Version.String(), false)
+						case "/lenition":
+							lenition(ctx)
 						default:
 							// unknown command error
 							sendEmbed(ctx, ctx.Command.Name, "I dont know this subcommand :(", true)
@@ -352,23 +373,6 @@ func registerCommands(router *dgc.Router) {
 		},
 		Description: "Show all possible lenitions",
 		IgnoreCase:  true,
-		Handler: func(ctx *dgc.Ctx) {
-			lenitionTable := fwew.GetLenitionTable()
-			const leftSize = 3
-			var output string
-			output += "```\n"
-			for _, lenition := range lenitionTable {
-				output += "" + lenition[0]
-				for i := len(lenition[0]); i < leftSize; i++ {
-					output += " "
-				}
-				if lenition[1] == "" {
-					lenition[1] = "(disappears)"
-				}
-				output += "→ " + lenition[1] + "\n"
-			}
-			output += "```"
-			sendDiscordMessageEmbed(ctx, output, false)
-		},
+		Handler:     lenition,
 	})
 }
