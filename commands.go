@@ -343,4 +343,32 @@ func registerCommands(router *dgc.Router) {
 			}
 		},
 	})
+
+	// command to show all possible lenitions
+	router.RegisterCmd(&dgc.Command{
+		Name: "lenition",
+		Aliases: []string{
+			"len",
+		},
+		Description: "Show all possible lenitions",
+		IgnoreCase:  true,
+		Handler: func(ctx *dgc.Ctx) {
+			lenitionTable := fwew.GetLenitionTable()
+			const leftSize = 3
+			var output string
+			output += "```\n"
+			for _, lenition := range lenitionTable {
+				output += "" + lenition[0]
+				for i := len(lenition[0]); i < leftSize; i++ {
+					output += "\u2002"
+				}
+				if lenition[1] == "" {
+					lenition[1] = "(disappears)"
+				}
+				output += "→ " + lenition[1] + "\n"
+			}
+			output += "```"
+			sendDiscordMessageEmbed(ctx, output, false)
+		},
+	})
 }
