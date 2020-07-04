@@ -9,6 +9,8 @@ github.com/fwew/fwew-lib/v5 v5.1.1-dev h1:sCJespjNVFhh/0wVo4z2soMK3TnDgpxhlL5LkS
 github.com/fwew/fwew-lib/v5 v5.1.1-dev/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
 github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704011328-6e98040e166f h1:rECYH8KIKPXMXQlLUCFqmn7SeQqodfGJa4JEec1Vbhs=
 github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704011328-6e98040e166f/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
+github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704015933-6236e5dd051a h1:SzMOugfMP+DSz9r6+Hz4hJ8z2qjcRx1l8DfQ8b9a8mE=
+github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704015933-6236e5dd051a/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
