@@ -5,12 +5,8 @@ github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0Y
 github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/fogleman/gg v1.2.1-0.20190220221249-0403632d5b90/go.mod h1:R/bRT+9gY/C5z7JzPU0zXsXHKM4/ayA+zqcVNZzPa1k=
 github.com/fogleman/gg v1.3.0/go.mod h1:R/bRT+9gY/C5z7JzPU0zXsXHKM4/ayA+zqcVNZzPa1k=
-github.com/fwew/fwew-lib/v5 v5.1.1-dev h1:sCJespjNVFhh/0wVo4z2soMK3TnDgpxhlL5LkSAvjnQ=
-github.com/fwew/fwew-lib/v5 v5.1.1-dev/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
-github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704011328-6e98040e166f h1:rECYH8KIKPXMXQlLUCFqmn7SeQqodfGJa4JEec1Vbhs=
-github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704011328-6e98040e166f/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
-github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704015933-6236e5dd051a h1:SzMOugfMP+DSz9r6+Hz4hJ8z2qjcRx1l8DfQ8b9a8mE=
-github.com/fwew/fwew-lib/v5 v5.1.1-dev.0.20200704015933-6236e5dd051a/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
+github.com/fwew/fwew-lib/v5 v5.1.2-dev h1:N2jYgsYsEIQLG64yYaKKaNf7Qr1soT2905IO1zOhRFQ=
+github.com/fwew/fwew-lib/v5 v5.1.2-dev/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
