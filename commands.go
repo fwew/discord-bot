@@ -204,6 +204,8 @@ func registerCommands(router *dgc.Router) {
 						case "/version":
 							sendDiscordMessageEmbed(ctx, Version.String(), false)
 						case "/lenition":
+							fallthrough
+						case "/len":
 							lenition(ctx)
 						default:
 							// unknown command error
