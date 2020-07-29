@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	fwew "github.com/fwew/fwew-lib/v5"
-	"github.com/knoxfighter/dgc"
 	"log"
 	"strconv"
 	"strings"
+
+	fwew "github.com/fwew/fwew-lib/v5"
+	"github.com/knoxfighter/dgc"
 )
 
 func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
@@ -219,7 +220,7 @@ func registerCommands(router *dgc.Router) {
 				// hardcoded stuff override (will send an additional message)
 				if arg == "hrh" {
 					// KP "HRH" video
-					hrh := "https://youtu.be/-AgnLH7Dw3w?t=4m14s\n"
+					hrh := "https://youtu.be/-AgnLH7Dw3w?t=274\n"
 					hrh += "> What would LOL be?\n"
 					hrh += "> It would have to do with the word herangham... maybe HRH"
 					sendDiscordMessageEmbed(ctx, hrh, false)
