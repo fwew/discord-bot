@@ -282,31 +282,49 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
+			var number int
+			var output string
+			var err error
+
 			arguments := ctx.Arguments
 			argument := arguments.Get(ctx.CustomObjects.MustGet("firstArg").(int))
-			argInt, err := strconv.ParseInt(argument.Raw(), 8, 16)
-			if err == nil {
+
+			// Parse number
+			arg := argument.Raw()
+			isNotDigit := func(c rune) bool { return c < '0' || c > '9' }
+			if strings.HasPrefix(arg, "0o") {
+				// is octal
+				newArg := strings.TrimPrefix(arg, "0o")
+				var argInt int64
+				argInt, err = strconv.ParseInt(newArg, 8, 16)
+				number = int(argInt)
+			} else if strings.IndexFunc(arg, isNotDigit) == -1 {
+				// is only digits
+				var argInt int64
+				argInt, err = strconv.ParseInt(arg, 10, 16)
+				number = int(argInt)
+			}
+
+			if number != 0 {
 				// It is an int, try to translate int
-				navi, err := fwew.NumberToNavi(int(argInt))
+				output, err = fwew.NumberToNavi(number)
 				if err != nil {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error writing number: %s", err), true)
 					return
 				}
-
-				sendDiscordMessageEmbed(ctx, navi, false)
+				output = "**" + output + "**\n"
 			} else {
 				// Try to translate from navi to number
-				number, err := fwew.NaviToNumber(argument.Raw())
+				number, err = fwew.NaviToNumber(arg)
 				if err != nil {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error reading number: %s", err), true)
 					return
 				}
-
-				// Write string to print
-				output := fmt.Sprintf("Decimal: %d\nOctal: %#o", number, number)
-
-				sendDiscordMessageEmbed(ctx, output, false)
 			}
+			// Write number to output too
+			output = fmt.Sprintf("%sDecimal: %d\nOctal: %#o", output, number, number)
+
+			sendDiscordMessageEmbed(ctx, output, false)
 		},
 	})
 
