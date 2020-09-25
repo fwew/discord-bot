@@ -294,21 +294,22 @@ func registerCommands(router *dgc.Router) {
 
 			// Parse number
 			arg := argument.Raw()
-			isNotDigit := func(c rune) bool { return c < '0' || c > '9' }
-			if strings.HasPrefix(arg, "0o") {
-				// is octal
-				newArg := strings.TrimPrefix(arg, "0o")
-				var argInt int64
-				argInt, err = strconv.ParseInt(newArg, 8, 16)
-				number = int(argInt)
-			} else if strings.IndexFunc(arg, isNotDigit) == -1 {
-				// is only digits
-				var argInt int64
-				argInt, err = strconv.ParseInt(arg, 10, 16)
-				number = int(argInt)
-			}
 
-			if number != 0 {
+			// check if arg starts with number
+			var rune rune
+			for _, r := range arg {
+				rune = r
+				break
+			}
+			if rune >= '0' && rune <= '9' {
+				// try to get number of it
+				argInt, err := strconv.ParseInt(arg, 0, 16)
+				if err != nil {
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error reading number from input: %s", err), true)
+					return
+				}
+				number = int(argInt)
+
 				// It is an int, try to translate int
 				output, err = fwew.NumberToNavi(number)
 				if err != nil {
