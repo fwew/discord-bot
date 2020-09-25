@@ -113,12 +113,14 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
-			arguments := ctx.Arguments
-			if arguments.Amount() >= 1 {
-				firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
-
-				random(arguments, firstArg, ctx)
+			firstArg, b := ctx.CustomObjects.Get("firstArg")
+			if !b {
+				sendDiscordMessageEmbed(ctx, "Wrong usage of `random` command!", true)
+				return
 			}
+
+			arguments := ctx.Arguments
+			random(arguments, firstArg.(int), ctx)
 		},
 	})
 
@@ -144,8 +146,12 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
-			firstArg := ctx.CustomObjects.MustGet("firstArg").(int)
-			list(ctx, firstArg)
+			firstArg, b := ctx.CustomObjects.Get("firstArg")
+			if !b {
+				sendDiscordMessageEmbed(ctx, "Wrong usage of `list` command!", true)
+				return
+			}
+			list(ctx, firstArg.(int))
 		},
 	})
 
@@ -290,7 +296,12 @@ func registerCommands(router *dgc.Router) {
 			var err error
 
 			arguments := ctx.Arguments
-			argument := arguments.Get(ctx.CustomObjects.MustGet("firstArg").(int))
+			firstArg, b := ctx.CustomObjects.Get("firstArg")
+			if !b {
+				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
+				return
+			}
+			argument := arguments.Get(firstArg.(int))
 
 			// Parse number
 			arg := argument.Raw()
