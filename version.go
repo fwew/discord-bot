@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	fwew "github.com/fwew/fwew-lib/v5"
 )
 
@@ -10,8 +11,9 @@ type version struct {
 	Label               string
 }
 
+// Version information
 var Version = version{
-	1, 1, 4,
+	1, 2, 0,
 	"dev",
 }
 
