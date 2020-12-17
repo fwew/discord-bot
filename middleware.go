@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/knoxfighter/dgc"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/knoxfighter/dgc"
 )
 
 func setDefaultLanguage(ctx *dgc.Ctx) {
@@ -27,6 +28,10 @@ func setDefaultLanguage(ctx *dgc.Ctx) {
 		ctx.CustomObjects.Set("langCode", "fr")
 	default:
 		ctx.CustomObjects.Set("langCode", "en")
+	}
+	switch ctx.Event.GuildID {
+	case "645332426532323367":
+		ctx.CustomObjects.Set("langCode", "de")
 	}
 }
 
@@ -51,11 +56,11 @@ func addMiddleware(router *dgc.Router) {
 			// set up default values of params
 			setDefaultLanguage(ctx)
 			ctx.CustomObjects.Set("reverse", false)      // translate from navi to locale
-			ctx.CustomObjects.Set("showInfix", false)    // dont show Infix data
-			ctx.CustomObjects.Set("showInfixDots", true) // dont show infix data dotted
-			ctx.CustomObjects.Set("showSource", false)   // dont show source
-			ctx.CustomObjects.Set("showDashed", true)    // dont show syllable stress
-			ctx.CustomObjects.Set("showIPA", false)      // dont show IPA data
+			ctx.CustomObjects.Set("showInfix", false)    // don't show Infix data
+			ctx.CustomObjects.Set("showInfixDots", true) // don't show infix data dotted
+			ctx.CustomObjects.Set("showSource", false)   // don't show source
+			ctx.CustomObjects.Set("showDashed", true)    // don't show syllable stress
+			ctx.CustomObjects.Set("showIPA", false)      // don't show IPA data
 
 			var nextLanguage, nextInfixDots, nextDashed bool
 			// read the real values from the user input
@@ -135,7 +140,7 @@ func addMiddleware(router *dgc.Router) {
 
 			member, err := ctx.Session.State.Member(guild, author)
 			if err != nil {
-				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Couldnt get member from guild: %s", err), true)
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Couldn't get member from guild: %s", err), true)
 				return
 			}
 
