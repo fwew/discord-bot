@@ -3,9 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
-	fwew "github.com/fwew/fwew-lib/v5"
-	"github.com/knoxfighter/dgc"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,8 +10,13 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+
+	"github.com/bwmarrin/discordgo"
+	fwew "github.com/fwew/fwew-lib/v5"
+	"github.com/knoxfighter/dgc"
 )
 
+// Config holds configuration options
 type Config struct {
 	Token     string   `json:"token"`
 	Prefixes  []string `json:"prefixes"`
@@ -76,6 +78,12 @@ func main() {
 
 	// open the session and connect to discord
 	err = session.Open()
+	if err != nil {
+		panic(err)
+	}
+
+	// set custom status
+	err = session.UpdateStatus(0, "DM me commands unrelated to discussion")
 	if err != nil {
 		panic(err)
 	}
