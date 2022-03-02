@@ -82,7 +82,7 @@ func lenition(ctx *dgc.Ctx) {
 			output += " "
 		}
 		if lenition[1] == "" {
-			lenition[1] = "(disappears)"
+			lenition[1] = "(disappears, except before ll or rr)"
 		}
 		output += "→ " + lenition[1] + "\n"
 	}
