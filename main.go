@@ -128,12 +128,11 @@ func main() {
 		switch reactionName {
 		case "⬅️":
 			// calculate new page
-			*m.curPage = (*m.curPage-1+1)%(len(m.pages)) + 1
-			//m.curPage = (m.curPage-1)%len(m.pages) + 1
+			*m.curPage = (*m.curPage-1+len(m.pages)-1)%len(m.pages) + 1
 
 			// set new stuff to embed
 			messageEmbed := m.message.Embeds[0]
-			messageEmbed.Title = fmt.Sprintf("%s (Page%d/%d)", m.title, *m.curPage, len(m.pages))
+			messageEmbed.Title = fmt.Sprintf("%s (Page %d/%d)", m.title, *m.curPage, len(m.pages))
 			messageEmbed.Description = m.pages[*m.curPage-1]
 
 			// edit the embed to the new one
@@ -147,7 +146,7 @@ func main() {
 
 			// set new stuff to embed
 			messageEmbed := m.message.Embeds[0]
-			messageEmbed.Title = fmt.Sprintf("%s (%d/%d)", m.title, *m.curPage, len(m.pages))
+			messageEmbed.Title = fmt.Sprintf("%s (Page %d/%d)", m.title, *m.curPage, len(m.pages))
 			messageEmbed.Description = m.pages[*m.curPage-1]
 
 			// edit the embed to the new one
