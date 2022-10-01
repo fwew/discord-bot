@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -181,7 +180,7 @@ func registerCommands(router *dgc.Router) {
 				}
 			}()
 
-			// Dont run if firstArg is not set (we have nothing to do in that case)
+			// Don't run if firstArg is not set (we have nothing to do in that case)
 			firstArgTemp, b := ctx.CustomObjects.Get("firstArg")
 			if !b {
 				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
@@ -216,7 +215,7 @@ func registerCommands(router *dgc.Router) {
 							lenition(ctx)
 						default:
 							// unknown command error
-							sendEmbed(ctx, ctx.Command.Name, "I dont know this subcommand :(", true)
+							sendEmbed(ctx, ctx.Command.Name, "I don't know this subcommand :(", true)
 						}
 
 						break
@@ -230,17 +229,6 @@ func registerCommands(router *dgc.Router) {
 					hrh += "> What would LOL be?\n"
 					hrh += "> It would have to do with the word herangham... maybe HRH"
 					sendDiscordMessageEmbed(ctx, hrh, false)
-					continue
-				}
-				if arg == "tunayayo" {
-					user, err := ctx.Session.User("277818358655877125")
-					if err != nil {
-						log.Printf("Error getting tunayayo user: %s", err)
-						continue
-					}
-					avatarURL := user.AvatarURL("2048")
-
-					sendEmbedImage(ctx, avatarURL)
 					continue
 				}
 
@@ -355,10 +343,10 @@ func registerCommands(router *dgc.Router) {
 				"  - `-l=<langCode>`: Set the language (de, en, et, fr, hu, nl, pl, ru, sv, tr). Default: en\n" +
 				"  - `-r`: `fwew` only param, that will mark the translation \"reversed\". If set, translation will be from locale to Na'vi\n" +
 				"  - `-i`: Show Infix locations with brackets\n" +
-				"  - `-id=false`: Dont show infix dots\n" +
+				"  - `-id=false`: Don't show infix dots\n" +
 				"  - `-src`: Show Source of this words\n" +
 				"  - `-ipa`: Show IPA data\n" +
-				"  - `-s=false`: Dont show the dashed syllable stress"
+				"  - `-s=false`: Don't show the dashed syllable stress"
 
 			sendDiscordMessageEmbed(ctx, info, false)
 		},
@@ -398,13 +386,13 @@ func registerCommands(router *dgc.Router) {
 		},
 	})
 
-	// command to show all possible lenitions
+	// command to show all possible lenition
 	router.RegisterCmd(&dgc.Command{
 		Name: "lenition",
 		Aliases: []string{
 			"len",
 		},
-		Description: "Show all possible lenitions",
+		Description: "Show all possible lenition",
 		IgnoreCase:  true,
 		Handler:     lenition,
 	})

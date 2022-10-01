@@ -12,11 +12,7 @@ import (
 
 func setDefaultLanguage(ctx *dgc.Ctx) {
 	switch ctx.Event.ChannelID {
-	case "398213699552411648": // #lerngruppe
-		fallthrough
 	case "298701183898484737": // #deutsch
-		fallthrough
-	case "706593256435351662": // #lerngruppe-übungsraum
 		ctx.CustomObjects.Set("langCode", "de")
 	case "466721683496239105": // #nederlands
 		ctx.CustomObjects.Set("langCode", "nl")
@@ -156,7 +152,6 @@ func addMiddleware(router *dgc.Router) {
 			}
 
 			sendDiscordMessageEmbed(ctx, "You are not allowed to use this command!", true)
-			return
 		}
 	})
 

@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"runtime/debug"
+
 	"github.com/bwmarrin/discordgo"
 	fwew "github.com/fwew/fwew-lib/v5"
 	"github.com/knoxfighter/dgc"
-	"log"
-	"runtime/debug"
 )
 
 func sendEmbed(ctx *dgc.Ctx, title string, message string, isErr bool) *discordgo.Message {
@@ -38,25 +39,25 @@ func sendEmbed(ctx *dgc.Ctx, title string, message string, isErr bool) *discordg
 	return dcMessage
 }
 
-func sendEmbedImage(ctx *dgc.Ctx, imageURL string) {
-	// create embed to send
-	embed := &discordgo.MessageEmbed{
-		Author: &discordgo.MessageEmbedAuthor{
-			Name:    ctx.Event.Author.Username,
-			IconURL: ctx.Event.Author.AvatarURL("1024"),
-		},
-		Image: &discordgo.MessageEmbedImage{
-			URL: imageURL,
-		},
-		Color: 0x607CA3,
-	}
+// func sendEmbedImage(ctx *dgc.Ctx, imageURL string) {
+// 	// create embed to send
+// 	embed := &discordgo.MessageEmbed{
+// 		Author: &discordgo.MessageEmbedAuthor{
+// 			Name:    ctx.Event.Author.Username,
+// 			IconURL: ctx.Event.Author.AvatarURL("1024"),
+// 		},
+// 		Image: &discordgo.MessageEmbedImage{
+// 			URL: imageURL,
+// 		},
+// 		Color: 0x607CA3,
+// 	}
 
-	// send the Embed
-	_, err := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embed)
-	if err != nil {
-		log.Printf("Something went wrong sending message to discord: %s", err)
-	}
-}
+// 	// send the Embed
+// 	_, err := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embed)
+// 	if err != nil {
+// 		log.Printf("Something went wrong sending message to discord: %s", err)
+// 	}
+// }
 
 // Send the message to discord within the `fwew` layout of an embed.
 func sendDiscordMessageEmbed(ctx *dgc.Ctx, message string, isErr bool) {
@@ -116,11 +117,11 @@ func sendDiscordMessagePaginated(ctx *dgc.Ctx, pages []string) {
 func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	var output []string
 	var outTemp string
-	for _, worda := range words {
-		if len(worda) == 0 {
+	for _, words := range words {
+		if len(words) == 0 {
 			outTemp += fwew.Text("none")
 		}
-		for i, word := range worda {
+		for i, word := range words {
 			line, err := word.ToOutputLine(
 				i,
 				true, // were discord-bot, always with markdown

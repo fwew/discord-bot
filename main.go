@@ -112,7 +112,7 @@ func main() {
 
 	// Add Handler for Reactions added
 	session.AddHandler(func(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
-		// dont run, when reaction is from myself
+		// don't run, when reaction is from myself
 		if event.UserID == session.State.User.ID {
 			return
 		}
@@ -205,7 +205,7 @@ func main() {
 	// Wait here until CTRL-C or other term signal is received.
 	log.Println("Fwew is now running.  Press CTRL-C or send Sigterm/Sigkill to exit.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
 	// cleanup pagination reactions
