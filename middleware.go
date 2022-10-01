@@ -26,6 +26,8 @@ func setDefaultLanguage(ctx *dgc.Ctx) {
 		ctx.CustomObjects.Set("langCode", "ru")
 	case "365987412163297284": // #français
 		ctx.CustomObjects.Set("langCode", "fr")
+	case "998643038878453870": // #türkçe
+		ctx.CustomObjects.Set("langCode", "tr")
 	default:
 		ctx.CustomObjects.Set("langCode", "en")
 	}
