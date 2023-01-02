@@ -30,6 +30,8 @@ func setDefaultLanguage(ctx *dgc.Ctx) {
 	switch ctx.Event.GuildID {
 	case "645332426532323367":
 		ctx.CustomObjects.Set("langCode", "de")
+	case "1058520916612624536":
+		ctx.CustomObjects.Set("langCode", "fr")
 	}
 }
 
