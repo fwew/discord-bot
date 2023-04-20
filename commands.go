@@ -115,6 +115,30 @@ func that(ctx *dgc.Ctx) {
 		}
 		output += "\n"
 	}
+
+	output += "\n"
+
+	otherThats := fwew.GetOtherThats()
+
+	//The other ones that don't fit on the chart
+	var lengths2 = [len(otherThats[4])]int{0,0,0}
+	for j := 0; j < len(otherThats[4]); j++ {
+		lengths2[j] = utf8.RuneCountInString(otherThats[4][j])
+	}
+  
+	for _, that := range otherThats {
+		for i := 0; i < len(that); i++ {
+			var word = that[i]
+				if(utf8.RuneCountInString(word) > 0) {
+				  	output += word
+					for j := utf8.RuneCountInString(word); j <= lengths2[i]; j++ {
+					output += " "
+				}
+			}
+		}
+		output += "\n"
+	}
+
 	output += "```"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
