@@ -89,6 +89,36 @@ func lenition(ctx *dgc.Ctx) {
 	sendDiscordMessageEmbed(ctx, output, false)
 }
 
+func that(ctx *dgc.Ctx) {
+	thatTable := fwew.GetThatTable()
+	const leftSize = 3
+	var output string
+	output += "```\n"
+
+	//Get column widths
+	var lengths = [len(thatTable[2])]int{0,0,0,0,0}
+	for j := 0; j < len(thatTable[2]); j++ {
+		lengths[j] = len(thatTable[2][j])
+	}
+	fmt.Println(lengths)
+
+	for _, that := range thatTable {
+		for i := 0; i < len(that); i++ {
+			var word = that[i]
+			if(len(word) > 0) {
+				output += word
+				for j := len(word); j < lengths[i]; j++ {
+				output += " "
+				}
+				output += "|"
+			}
+		}
+		output += "\n"
+	}
+	output += "```"
+	sendDiscordMessageEmbed(ctx, output, false)
+}
+
 func registerCommands(router *dgc.Router) {
 	// Random command
 	router.RegisterCmd(&dgc.Command{
@@ -213,6 +243,8 @@ func registerCommands(router *dgc.Router) {
 							fallthrough
 						case "/len":
 							lenition(ctx)
+						case "/that":
+							that(ctx)
 						default:
 							// unknown command error
 							sendEmbed(ctx, ctx.Command.Name, "I don't know this subcommand :(", true)
