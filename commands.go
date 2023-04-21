@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+        "unicode/utf8"
 
 	fwew "github.com/fwew/fwew-lib/v5"
 	"github.com/knoxfighter/dgc"
