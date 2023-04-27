@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-        "unicode/utf8"
+	"unicode/utf8"
 
 	fwew "github.com/fwew/fwew-lib/v5"
 	"github.com/knoxfighter/dgc"
@@ -97,7 +97,7 @@ func that(ctx *dgc.Ctx) {
 	output += "```\n"
 
 	//Get column widths
-	var lengths = [len(thatTable[2])]int{0,0,0,0,0}
+	var lengths = [len(thatTable[2])]int{0, 0, 0, 0, 0}
 	for j := 0; j < len(thatTable[2]); j++ {
 		lengths[j] = len(thatTable[2][j])
 	}
@@ -106,10 +106,10 @@ func that(ctx *dgc.Ctx) {
 	for _, that := range thatTable {
 		for i := 0; i < len(that); i++ {
 			var word = that[i]
-			if(len(word) > 0) {
+			if len(word) > 0 {
 				output += word
 				for j := len(word); j < lengths[i]; j++ {
-				output += " "
+					output += " "
 				}
 				output += "|"
 			}
@@ -122,17 +122,17 @@ func that(ctx *dgc.Ctx) {
 	otherThats := fwew.GetOtherThats()
 
 	//The other ones that don't fit on the chart
-	var lengths2 = [len(otherThats[4])]int{0,0,0}
-	for j := 0; j < len(otherThats[4]); j++ {
-		lengths2[j] = utf8.RuneCountInString(otherThats[4][j])
+	var lengths2 = [len(otherThats[6])]int{0, 0, 0}
+	for j := 0; j < len(otherThats[6]); j++ {
+		lengths2[j] = utf8.RuneCountInString(otherThats[6][j])
 	}
-  
+
 	for _, that := range otherThats {
 		for i := 0; i < len(that); i++ {
 			var word = that[i]
-				if(utf8.RuneCountInString(word) > 0) {
-				  	output += word
-					for j := utf8.RuneCountInString(word); j <= lengths2[i]; j++ {
+			if utf8.RuneCountInString(word) > 0 {
+				output += word
+				for j := utf8.RuneCountInString(word); j <= lengths2[i]; j++ {
 					output += " "
 				}
 			}
