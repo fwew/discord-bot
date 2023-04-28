@@ -101,7 +101,6 @@ func that(ctx *dgc.Ctx) {
 	for j := 0; j < len(thatTable[2]); j++ {
 		lengths[j] = len(thatTable[2][j])
 	}
-	fmt.Println(lengths)
 
 	for _, that := range thatTable {
 		for i := 0; i < len(that); i++ {
