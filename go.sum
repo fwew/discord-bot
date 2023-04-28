@@ -5,8 +5,8 @@ github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0Y
 github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/fogleman/gg v1.2.1-0.20190220221249-0403632d5b90/go.mod h1:R/bRT+9gY/C5z7JzPU0zXsXHKM4/ayA+zqcVNZzPa1k=
 github.com/fogleman/gg v1.3.0/go.mod h1:R/bRT+9gY/C5z7JzPU0zXsXHKM4/ayA+zqcVNZzPa1k=
-github.com/fwew/fwew-lib/v5 v5.7.1-dev.0.20230421062615-20c537ec9644 h1:sZeaV5g0U7Em8NsnkzJqdrTdUuztmcjZHEa6IpjcWdU=
-github.com/fwew/fwew-lib/v5 v5.7.1-dev.0.20230421062615-20c537ec9644/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
+github.com/fwew/fwew-lib/v5 v5.7.1-dev.0.20230428034020-b930f683d584 h1:hcGNWTng6GCNpQdGPVelno4uVunuBPjXwGhtCMU4mZY=
+github.com/fwew/fwew-lib/v5 v5.7.1-dev.0.20230428034020-b930f683d584/go.mod h1:dALuU7if8kRp0+YtYAohr402EhMIvrJb+awq98zNPF0=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
