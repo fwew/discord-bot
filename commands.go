@@ -90,6 +90,25 @@ func lenition(ctx *dgc.Ctx) {
 	sendDiscordMessageEmbed(ctx, output, false)
 }
 
+func shortLenition(ctx *dgc.Ctx) {
+	lenitionTable := fwew.GetShortLenitionTable()
+	const leftSize = 10
+	var output string
+	output += "```\n"
+	for _, lenition := range lenitionTable {
+		for i := len(lenition[0]); i < leftSize; i++ {
+			output += " "
+		}
+		output += "" + lenition[0]
+		if lenition[1] == "" {
+			lenition[1] = "(disappears, except before ll or rr)"
+		}
+		output += " → " + lenition[1] + "\n"
+	}
+	output += "```"
+	sendDiscordMessageEmbed(ctx, output, false)
+}
+
 func that(ctx *dgc.Ctx) {
 	thatTable := fwew.GetThatTable()
 	const leftSize = 3
@@ -444,12 +463,25 @@ func registerCommands(router *dgc.Router) {
 
 	// command to show all possible lenition
 	router.RegisterCmd(&dgc.Command{
-		Name: "lenition",
-		Aliases: []string{
-			"len",
-		},
+		Name:        "lenition",
 		Description: "Show all possible lenition",
 		IgnoreCase:  true,
 		Handler:     lenition,
+	})
+
+	// command to show all possible len
+	router.RegisterCmd(&dgc.Command{
+		Name:        "len",
+		Description: "Show all possible lenition (short)",
+		IgnoreCase:  true,
+		Handler:     shortLenition,
+	})
+
+	// command to show all possible thats
+	router.RegisterCmd(&dgc.Command{
+		Name:        "that",
+		Description: "Show all possible thats",
+		IgnoreCase:  true,
+		Handler:     that,
 	})
 }
