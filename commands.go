@@ -140,9 +140,9 @@ func that(ctx *dgc.Ctx) {
 	otherThats := fwew.GetOtherThats()
 
 	//The other ones that don't fit on the chart
-	var lengths2 = [len(otherThats[6])]int{0, 0, 0}
-	for j := 0; j < len(otherThats[6]); j++ {
-		lengths2[j] = utf8.RuneCountInString(otherThats[6][j])
+	var lengths2 = [len(otherThats[7])]int{0, 0, 0}
+	for j := 0; j < len(otherThats[7]); j++ {
+		lengths2[j] = utf8.RuneCountInString(otherThats[7][j])
 	}
 
 	for _, that := range otherThats {
