@@ -8,4 +8,5 @@ require (
 	github.com/knoxfighter/dgc v0.0.0-20201030020537-397f394c484d
 )
 
+//for testing on a local machine's fwew-lib
 //replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
