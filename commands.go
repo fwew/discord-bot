@@ -163,6 +163,39 @@ func that(ctx *dgc.Ctx) {
 	sendDiscordMessageEmbed(ctx, output, false)
 }
 
+func cameronWords(ctx *dgc.Ctx) {
+	var output string = "```Cameron words:\n" +
+		"|Names:   |Nouns:   |Other: |\n" +
+		"|=========|=========|=======|\n" +
+		"|Akwey    |'itan    |eyk    |\n" +
+		"|Ateyo    |'ite     |irayo  |\n" +
+		"|Aonung   |atan     |makto  |\n" +
+		"|Eytukan  |au (drum)|taron  |\n" +
+		"|Eywa     |eyktan   |te     |\n" +
+		"|Kiri     |i'en     |\n" +
+		"|Lo'ak    |Iknimaya |\n" +
+		"|Mo'at    |mikyun   |\n" +
+		"|Na'vi    |ontu     |\n" +
+		"|Neteyam  |seyri    |\n" +
+		"|Newey    |tsaheylu |\n" +
+		"|Neytiri  |tsahìk   |\n" +
+		"|Ninat    |unil     |\n" +
+		"|Omatikaya|\n" +
+		"|Otranyu  |\n" +
+		"|Ronal    |\n" +
+		"|Rongloa  |      |Life:     |\n" +
+		"|Rotxo    |      |==========|\n" +
+		"|Silwanin |      |Atokirina'|\n" +
+		"|Tonowari |      |Ikran     |\n" +
+		"|Tuktirey |      |Palulukan |\n" +
+		"|Tsireya  |      |Riti      |\n" +
+		"|Tskaha   |      |talioang  |\n" +
+		"|Tsu'tey  |      |teylu     |\n" +
+		"|Tsumongwi|      |Toruk     |\n" +
+		"```"
+	sendDiscordMessageEmbed(ctx, output, false)
+}
+
 func registerCommands(router *dgc.Router) {
 	// Random command
 	router.RegisterCmd(&dgc.Command{
@@ -289,6 +322,8 @@ func registerCommands(router *dgc.Router) {
 							lenition(ctx)
 						case "/that":
 							that(ctx)
+						case "/cameronWords":
+							cameronWords(ctx)
 						default:
 							// unknown command error
 							sendEmbed(ctx, ctx.Command.Name, "I don't know this subcommand :(", true)
@@ -484,5 +519,13 @@ func registerCommands(router *dgc.Router) {
 		Description: "Show all possible thats",
 		IgnoreCase:  true,
 		Handler:     that,
+	})
+
+	// command to show wordes James Cameron invented
+	router.RegisterCmd(&dgc.Command{
+		Name:        "cameronWords",
+		Description: "Show words James Cameron invented",
+		IgnoreCase:  true,
+		Handler:     cameronWords,
 	})
 }
