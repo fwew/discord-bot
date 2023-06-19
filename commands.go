@@ -164,8 +164,7 @@ func that(ctx *dgc.Ctx) {
 }
 
 func cameronWords(ctx *dgc.Ctx) {
-	var output string = "## Cameron words:\n" +
-	"- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
+	var output string = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
 	"Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
 	"Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
 	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
