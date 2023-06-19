@@ -165,11 +165,15 @@ func that(ctx *dgc.Ctx) {
 
 func cameronWords(ctx *dgc.Ctx) {
 	var output string = "## Cameron words:\n" +
-	"- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa, Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
-	"Otranyu, Rongloa, Silwanin, Tonowari, Tuktirey, Tsireya, Tskaha, Tsu'tey, Tsumongwi\n" +
-	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam, Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
-	"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en, Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
-	"- **Life:** Atokirina', Ikran, Palulukan, Riti, talioang, teylu, Toruk\n" +
+	"- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
+	"Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
+	"Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
+	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
+	"Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
+	"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
+	"Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
+	"- **Life:** Atokirina', Ikran, Palulukan," +
+	"Riti, talioang, teylu, Toruk\n" +
 	"- **Other:** eyk, irayo, makto taron, te"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
