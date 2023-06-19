@@ -164,35 +164,13 @@ func that(ctx *dgc.Ctx) {
 }
 
 func cameronWords(ctx *dgc.Ctx) {
-	var output string = "```Cameron words:\n" +
-		"|Names:   |Nouns:   |Other: |\n" +
-		"|=========|=========|=======|\n" +
-		"|Akwey    |'itan    |eyk    |\n" +
-		"|Ateyo    |'ite     |irayo  |\n" +
-		"|Aonung   |atan     |makto  |\n" +
-		"|Eytukan  |au (drum)|taron  |\n" +
-		"|Eywa     |eyktan   |te     |\n" +
-		"|Kiri     |i'en     |\n" +
-		"|Lo'ak    |Iknimaya |\n" +
-		"|Mo'at    |mikyun   |\n" +
-		"|Na'vi    |ontu     |\n" +
-		"|Neteyam  |seyri    |\n" +
-		"|Newey    |tsaheylu |\n" +
-		"|Neytiri  |tsahìk   |\n" +
-		"|Ninat    |unil     |\n" +
-		"|Omatikaya|\n" +
-		"|Otranyu  |\n" +
-		"|Ronal    |\n" +
-		"|Rongloa  |      |Life:     |\n" +
-		"|Rotxo    |      |==========|\n" +
-		"|Silwanin |      |Atokirina'|\n" +
-		"|Tonowari |      |Ikran     |\n" +
-		"|Tuktirey |      |Palulukan |\n" +
-		"|Tsireya  |      |Riti      |\n" +
-		"|Tskaha   |      |talioang  |\n" +
-		"|Tsu'tey  |      |teylu     |\n" +
-		"|Tsumongwi|      |Toruk     |\n" +
-		"```"
+	var output string = "## Cameron words:\n" +
+	"- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa, Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
+	"Otranyu, Rongloa, Silwanin, Tonowari, Tuktirey, Tsireya, Tskaha, Tsu'tey, Tsumongwi\n" +
+	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam, Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
+	"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en, Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n"
+	"- **Life:** Atokirina', Ikran, Palulukan, Riti, talioang, teylu, Toruk\n" +
+	"- **Other:** eyk, irayo, makto taron, te"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
 
@@ -523,7 +501,7 @@ func registerCommands(router *dgc.Router) {
 
 	// command to show wordes James Cameron invented
 	router.RegisterCmd(&dgc.Command{
-		Name:        "cameronWords",
+		Name:        "Cameron Words",
 		Description: "Show words James Cameron invented",
 		IgnoreCase:  true,
 		Handler:     cameronWords,
