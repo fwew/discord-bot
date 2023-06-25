@@ -163,6 +163,20 @@ func that(ctx *dgc.Ctx) {
 	sendDiscordMessageEmbed(ctx, output, false)
 }
 
+func cameronWords(ctx *dgc.Ctx) {
+	var output string = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
+	" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
+	" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
+	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
+	" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
+	"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
+	" Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
+	"- **Life:** Atokirina', Ikran, Palulukan," +
+	" Riti, talioang, teylu, Toruk\n" +
+	"- **Other:** eyk, irayo, makto, taron, te"
+	sendDiscordMessageEmbed(ctx, output, false)
+}
+
 func registerCommands(router *dgc.Router) {
 	// Random command
 	router.RegisterCmd(&dgc.Command{
@@ -289,6 +303,8 @@ func registerCommands(router *dgc.Router) {
 							lenition(ctx)
 						case "/that":
 							that(ctx)
+						case "/cameronWords":
+							cameronWords(ctx)
 						default:
 							// unknown command error
 							sendEmbed(ctx, ctx.Command.Name, "I don't know this subcommand :(", true)
@@ -484,5 +500,13 @@ func registerCommands(router *dgc.Router) {
 		Description: "Show all possible thats",
 		IgnoreCase:  true,
 		Handler:     that,
+	})
+
+	// command to show wordes James Cameron invented
+	router.RegisterCmd(&dgc.Command{
+		Name:        "Cameron Words",
+		Description: "Show words James Cameron invented",
+		IgnoreCase:  true,
+		Handler:     cameronWords,
 	})
 }
