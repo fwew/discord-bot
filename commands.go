@@ -165,15 +165,15 @@ func that(ctx *dgc.Ctx) {
 
 func cameronWords(ctx *dgc.Ctx) {
 	var output string = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
-	" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
-	" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
-	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
-	" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
-	"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
-	" Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
-	"- **Life:** Atokirina', Ikran, Palulukan," +
-	" Riti, talioang, teylu, Toruk\n" +
-	"- **Other:** eyk, irayo, makto, taron, te"
+		" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
+		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
+		"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
+		" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
+		"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
+		" Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
+		"- **Life:** Atokirina', Ikran, Palulukan," +
+		" Riti, talioang, teylu, Toruk\n" +
+		"- **Other:** eyk, irayo, makto, taron, te"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
 
@@ -329,7 +329,72 @@ func registerCommands(router *dgc.Router) {
 					navi = fwew.TranslateToNavi(arg, langCode)
 				} else {
 					var err error
-					navi, err = fwew.TranslateFromNavi(arg)
+					navi, err = fwew.TranslateFromNavi(arg, true)
+					if err != nil {
+						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
+					}
+				}
+				words[j] = navi
+				wordFound = true
+			}
+
+			if wordFound {
+				sendWordDiscordEmbed(ctx, words)
+			}
+		},
+	})
+
+	// translation and skipping any affix checks
+	router.RegisterCmd(&dgc.Command{
+		Name: "fwew-simple",
+		Aliases: []string{
+			"search",
+			"translate",
+			"trans",
+		},
+		Description: "Translate a word (no checking for affixes)",
+		Usage:       "fwew-simple <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
+		Example:     "fwew-simple uturu",
+		Flags: []string{
+			"params",
+			"statistic",
+		},
+		IgnoreCase:  false,
+		SubCommands: nil,
+		Handler: func(ctx *dgc.Ctx) {
+			arguments := ctx.Arguments
+
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
+			// Don't run if firstArg is not set (we have nothing to do in that case)
+			firstArgTemp, b := ctx.CustomObjects.Get("firstArg")
+			if !b {
+				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
+				return
+			}
+
+			firstArg := firstArgTemp.(int)
+			amount := arguments.Amount() - firstArg
+			words := make([][]fwew.Word, amount)
+
+			langCode := ctx.CustomObjects.MustGet("langCode").(string)
+
+			var wordFound bool
+
+			// all params are words to search
+			for i, j := firstArg, 0; i < arguments.Amount(); i, j = i+1, j+1 {
+				arg := arguments.Get(i).Raw()
+
+				var navi []fwew.Word
+				if ctx.CustomObjects.MustGet("reverse").(bool) {
+					navi = fwew.TranslateToNavi(arg, langCode)
+				} else {
+					var err error
+					navi, err = fwew.TranslateFromNavi(arg, false)
 					if err != nil {
 						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 					}
