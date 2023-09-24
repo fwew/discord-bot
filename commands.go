@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -175,6 +176,39 @@ func cameronWords(ctx *dgc.Ctx) {
 		" Riti, talioang, teylu, Toruk\n" +
 		"- **Other:** eyk, irayo, makto, taron, te"
 	sendDiscordMessageEmbed(ctx, output, false)
+}
+
+// Helper function for phoneme_frequency
+func chart_entry(entry string, amount string, length int) (output string) {
+	output = entry
+	for i := utf8.RuneCountInString(entry); i < length-utf8.RuneCountInString(amount); i++ {
+		output += " "
+	}
+	output += amount + "|"
+	return output
+}
+
+// helper classes for phoneme_frequency
+type phoneme struct {
+	Freq int
+	Name string
+}
+
+type phonemes []phoneme
+
+func (e phonemes) Len() int {
+	return len(e)
+}
+
+func (e phonemes) Less(i, j int) bool {
+	if e[i].Freq == e[j].Freq {
+		return e[i].Name < e[j].Name
+	}
+	return e[i].Freq > e[j].Freq
+}
+
+func (e phonemes) Swap(i, j int) {
+	e[i], e[j] = e[j], e[i]
 }
 
 func registerCommands(router *dgc.Router) {
@@ -567,11 +601,112 @@ func registerCommands(router *dgc.Router) {
 		Handler:     that,
 	})
 
-	// command to show wordes James Cameron invented
+	// command to show words James Cameron invented
 	router.RegisterCmd(&dgc.Command{
 		Name:        "Cameron Words",
 		Description: "Show words James Cameron invented",
 		IgnoreCase:  true,
 		Handler:     cameronWords,
+	})
+
+	// command to show how often each phoneme appears
+	router.RegisterCmd(&dgc.Command{
+		Name:        "phoneme-frequency",
+		Description: "Show how often a phoneme appears",
+		IgnoreCase:  true,
+		Handler: func(ctx *dgc.Ctx) {
+			all_frequencies := fwew.GetPhonemeDistrosMap()
+			entries := []string{"| Onset:|Nuclei:|Ending:|", "|=======|=======|=======|"}
+
+			onset_letters := [21]string{"t", "", "n", "k", "l", "s", "'", "p", "r", "y",
+				"ts", "m", "tx", "v", "w", "h", "ng", "z", "kx", "px", "f"}
+			nucleus_letters := [14]string{"a", "e", "ì", "o", "u", "i", "ä", "aw", "ey", "ù", "rr", "ay", "ew", "ll"}
+			coda_letters := [13]string{"", "n", "m", "ng", "l", "k", "p", "'", "r", "t", "kx", "px", "tx"}
+
+			// Onsets
+			onset_tuples := []phoneme{}
+			for i := 0; i < len(onset_letters); i++ {
+				var a phoneme
+				a.Name = onset_letters[i]
+				a.Freq = all_frequencies["Others"]["Onsets"][onset_letters[i]]
+				onset_tuples = append(onset_tuples, a)
+			}
+
+			sort.Sort(phonemes(onset_tuples))
+
+			for i := 0; i < len(onset_tuples); i++ {
+				entries = append(entries, "|"+chart_entry(onset_tuples[i].Name, strconv.Itoa(onset_tuples[i].Freq), 7))
+			}
+
+			// Nuclei
+			nuclei_tuples := []phoneme{}
+			for i := 0; i < len(nucleus_letters); i++ {
+				var a phoneme
+				a.Name = nucleus_letters[i]
+				a.Freq = all_frequencies["Others"]["Nuclei"][nucleus_letters[i]]
+				nuclei_tuples = append(nuclei_tuples, a)
+			}
+
+			sort.Sort(phonemes(nuclei_tuples))
+
+			i := 2
+			for ; i < len(nuclei_tuples); i++ {
+				entries[i] += chart_entry(nuclei_tuples[i].Name, strconv.Itoa(nuclei_tuples[i].Freq), 7)
+			}
+			for ; i < len(entries); i++ {
+				entries[i] += "       |"
+			}
+
+			// Ends
+			codaTuples := []phoneme{}
+			for i := 0; i < len(coda_letters); i++ {
+				var a phoneme
+				a.Name = nucleus_letters[i]
+				a.Freq = all_frequencies["Others"]["Codas"][coda_letters[i]]
+				codaTuples = append(codaTuples, a)
+			}
+
+			sort.Sort(phonemes(codaTuples))
+
+			i = 2
+			for ; i < len(codaTuples); i++ {
+				entries[i] += chart_entry(codaTuples[i].Name, strconv.Itoa(codaTuples[i].Freq), 7)
+			}
+			for ; i < len(entries); i++ {
+				entries[i] += "       |"
+			}
+
+			// Top
+			//entries_2 = "## Phoneme distributions:\n```\n"
+			entries = append(entries, "")
+			entries = append(entries, "Clusters:")
+			entries = append(entries, "  | f:| s:|ts:|")
+			entries = append(entries, "==|===|===|===|")
+
+			// Clusters
+			cluster_starts := []string{"f", "s", "ts"}
+			cluster_ends := []string{"k", "kx", "l", "m", "n", "ng", "p", "px", "r", "t", "tx", "w", "y"}
+
+			for i := 0; i < len(cluster_ends); i++ {
+				entries = append(entries, chart_entry("", cluster_ends[i], 2))
+			}
+
+			// clusters
+			for i := 0; i < len(cluster_starts); i++ {
+				for j := 0; j < len(cluster_ends); j++ {
+					entries[j+len(entries)-len(cluster_ends)] += chart_entry("", strconv.Itoa(all_frequencies["Clusters"][cluster_starts[i]][cluster_ends[j]]), 3)
+				}
+			}
+
+			results := "```\n"
+
+			for i := 0; i < len(entries); i++ {
+				results += entries[i] + "\n"
+			}
+
+			results += "```"
+
+			sendDiscordMessageEmbed(ctx, results, false)
+		},
 	})
 }
