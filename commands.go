@@ -650,8 +650,8 @@ func registerCommands(router *dgc.Router) {
 			sort.Sort(phonemes(nuclei_tuples))
 
 			i := 2
-			for ; i < len(nuclei_tuples); i++ {
-				entries[i] += chart_entry(nuclei_tuples[i].Name, strconv.Itoa(nuclei_tuples[i].Freq), 7)
+			for ; i < len(nuclei_tuples)+2; i++ {
+				entries[i] += chart_entry(nuclei_tuples[i-2].Name, strconv.Itoa(nuclei_tuples[i-2].Freq), 7)
 			}
 			for ; i < len(entries); i++ {
 				entries[i] += "       |"
@@ -661,7 +661,7 @@ func registerCommands(router *dgc.Router) {
 			codaTuples := []phoneme{}
 			for i := 0; i < len(coda_letters); i++ {
 				var a phoneme
-				a.Name = nucleus_letters[i]
+				a.Name = coda_letters[i]
 				a.Freq = all_frequencies["Others"]["Codas"][coda_letters[i]]
 				codaTuples = append(codaTuples, a)
 			}
@@ -669,8 +669,8 @@ func registerCommands(router *dgc.Router) {
 			sort.Sort(phonemes(codaTuples))
 
 			i = 2
-			for ; i < len(codaTuples); i++ {
-				entries[i] += chart_entry(codaTuples[i].Name, strconv.Itoa(codaTuples[i].Freq), 7)
+			for ; i < len(codaTuples)+2; i++ {
+				entries[i] += chart_entry(codaTuples[i-2].Name, strconv.Itoa(codaTuples[i-2].Freq), 7)
 			}
 			for ; i < len(entries); i++ {
 				entries[i] += "       |"
