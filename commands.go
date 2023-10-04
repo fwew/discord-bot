@@ -360,10 +360,10 @@ func registerCommands(router *dgc.Router) {
 
 				var navi []fwew.Word
 				if ctx.CustomObjects.MustGet("reverse").(bool) {
-					navi = fwew.TranslateToNavi(arg, langCode)
+					navi = fwew.TranslateToNaviHash(arg, langCode)
 				} else {
 					var err error
-					navi, err = fwew.TranslateFromNavi(arg, true)
+					navi, err = fwew.TranslateFromNaviHash(arg, true)
 					if err != nil {
 						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 					}
@@ -425,10 +425,10 @@ func registerCommands(router *dgc.Router) {
 
 				var navi []fwew.Word
 				if ctx.CustomObjects.MustGet("reverse").(bool) {
-					navi = fwew.TranslateToNavi(arg, langCode)
+					navi = fwew.TranslateToNaviHash(arg, langCode)
 				} else {
 					var err error
-					navi, err = fwew.TranslateFromNavi(arg, false)
+					navi, err = fwew.TranslateFromNaviHash(arg, false)
 					if err != nil {
 						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 					}

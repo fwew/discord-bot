@@ -68,7 +68,7 @@ func main() {
 	fwew.PhonemeDistros()
 
 	// cache fwew dictionary
-	err = fwew.CacheDict()
+	err = fwew.CacheDictHash()
 	if err != nil {
 		panic(err)
 	}
