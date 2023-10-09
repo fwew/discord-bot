@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"runtime/debug"
+	"strconv"
 
 	"github.com/bwmarrin/discordgo"
 	fwew "github.com/fwew/fwew-lib/v5"
@@ -117,13 +118,14 @@ func sendDiscordMessagePaginated(ctx *dgc.Ctx, pages []string) {
 func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	var output []string
 	var outTemp string
-	for _, words := range words {
+	for i, words := range words {
 		if len(words) == 0 {
 			outTemp += fwew.Text("none")
 		}
-		for i, word := range words {
+		for j, word := range words {
+			iString := strconv.Itoa(i+1) + string('a'+j)
 			line, err := word.ToOutputLine(
-				i,
+				iString,
 				true, // were discord-bot, always with markdown
 				ctx.CustomObjects.MustGet("showIPA").(bool),
 				ctx.CustomObjects.MustGet("showInfix").(bool),
