@@ -115,6 +115,39 @@ func sendDiscordMessagePaginated(ctx *dgc.Ctx, pages []string) {
 	}
 }
 
+func send1dWordDiscordEmbed(ctx *dgc.Ctx, words []fwew.Word) {
+	var output []string
+	var outTemp string
+
+	for j, word := range words {
+		iString := strconv.Itoa(j + 1)
+		line, err := word.ToOutputLine(
+			iString,
+			true, // were discord-bot, always with markdown
+			ctx.CustomObjects.MustGet("showIPA").(bool),
+			ctx.CustomObjects.MustGet("showInfix").(bool),
+			ctx.CustomObjects.MustGet("showDashed").(bool),
+			ctx.CustomObjects.MustGet("showInfixDots").(bool),
+			ctx.CustomObjects.MustGet("showSource").(bool),
+			ctx.CustomObjects.MustGet("langCode").(string),
+		)
+		if err != nil {
+			sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error creating output line: %s", err), true)
+			return
+		}
+
+		if (len(outTemp) + len(line)) > 2000 {
+			// add to output
+			output = append(output, outTemp)
+			outTemp = ""
+		}
+		outTemp += line
+	}
+	// add last outTemp also
+	output = append(output, outTemp)
+	sendDiscordMessagePaginated(ctx, output)
+}
+
 func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	var output []string
 	var outTemp string

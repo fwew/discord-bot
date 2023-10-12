@@ -50,7 +50,7 @@ func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
 		return
 	}
 
-	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+	send1dWordDiscordEmbed(ctx, [][]fwew.Word{words}[0])
 }
 
 func list(ctx *dgc.Ctx, firstArg int) {
@@ -69,7 +69,7 @@ func list(ctx *dgc.Ctx, firstArg int) {
 		return
 	}
 
-	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+	send1dWordDiscordEmbed(ctx, [][]fwew.Word{words}[0])
 }
 
 func lenition(ctx *dgc.Ctx) {
