@@ -158,7 +158,7 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 		for j, word := range words {
 			iString := strconv.Itoa(i + 1)
 			if len(words) > 1 {
-				iString += string('a' + j)
+				iString += "-" + strconv.Itoa(j+1)
 			}
 			line, err := word.ToOutputLine(
 				iString,
