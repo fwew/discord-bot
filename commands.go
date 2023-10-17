@@ -284,9 +284,9 @@ func registerCommands(router *dgc.Router) {
 			"translate",
 			"trans",
 		},
-		Description: "Translate a word",
-		Usage:       "fwew <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
-		Example:     "fwew kaltxì",
+		Description: "Translate a word or several",
+		Usage:       "fwew <word>...\n<word>:\n  - A word to translate\n  - With `-r`: A locale word to translate",
+		Example:     "fwew kaltxì run",
 		Flags: []string{
 			"params",
 			"statistic",
@@ -310,12 +310,8 @@ func registerCommands(router *dgc.Router) {
 			}
 
 			firstArg := firstArgTemp.(int)
-			amount := arguments.Amount() - firstArg
-			words := make([][]fwew.Word, amount)
 
 			langCode := ctx.CustomObjects.MustGet("langCode").(string)
-
-			var wordFound bool
 
 			// all params are words to search
 			arg := arguments.Get(0).Raw()
@@ -360,33 +356,21 @@ func registerCommands(router *dgc.Router) {
 			argString = argString[:len(argString)-1]
 
 			var navi [][]fwew.Word
-			if ctx.CustomObjects.MustGet("reverse").(bool) {
-				navi = fwew.TranslateToNaviHash(argString, langCode)
-			} else {
-				var err error
-				navi, err = fwew.TranslateFromNaviHash(argString, true)
-				if err != nil {
-					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
-				}
-			}
-			words = navi
-			wordFound = true
 
-			if wordFound {
-				sendWordDiscordEmbed(ctx, words)
+			var err error
+			navi, err = fwew.BidirectionalSearch(argString, true, langCode)
+			if err != nil {
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 			}
+
+			sendWordDiscordEmbed(ctx, navi)
 		},
 	})
 
 	// translation and skipping any affix checks
 	router.RegisterCmd(&dgc.Command{
-		Name: "fwew-simple",
-		Aliases: []string{
-			"search",
-			"translate",
-			"trans",
-		},
-		Description: "Translate a word (no checking for affixes)",
+		Name:        "fwew-simple",
+		Description: "Translate a word (no checking for affixes or natural language words)",
 		Usage:       "fwew-simple <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
 		Example:     "fwew-simple uturu",
 		Flags: []string{

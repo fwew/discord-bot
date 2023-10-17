@@ -64,8 +64,8 @@ func main() {
 		panic(err)
 	}
 
-	// Look up phoneme frequencies once for the phoneme-frequency command
-	fwew.PhonemeDistros()
+	// Cache everything and assure the dictionary
+	fwew.StartEverything()
 
 	// cache fwew dictionary
 	err = fwew.CacheDictHash()
