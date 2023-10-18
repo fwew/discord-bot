@@ -50,7 +50,7 @@ func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
 		return
 	}
 
-	send1dWordDiscordEmbed(ctx, [][]fwew.Word{words}[0])
+	send1dWordDiscordEmbed(ctx, words)
 }
 
 func list(ctx *dgc.Ctx, firstArg int) {
@@ -69,7 +69,7 @@ func list(ctx *dgc.Ctx, firstArg int) {
 		return
 	}
 
-	send1dWordDiscordEmbed(ctx, [][]fwew.Word{words}[0])
+	send1dWordDiscordEmbed(ctx, words)
 }
 
 func lenition(ctx *dgc.Ctx) {
@@ -402,8 +402,6 @@ func registerCommands(router *dgc.Router) {
 			langCode := ctx.CustomObjects.MustGet("langCode").(string)
 
 			var wordFound bool
-
-			fmt.Println(arguments)
 
 			// all params are words to search
 			argString := ""
