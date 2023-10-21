@@ -340,7 +340,7 @@ func registerCommands(router *dgc.Router) {
 			}
 
 			// hardcoded stuff override (will send an additional message)
-			if arg == "hrh" {
+			if strings.ToLower(arg) == "hrh" {
 				// KP "HRH" video
 				hrh := "https://youtu.be/-AgnLH7Dw3w?t=274\n"
 				hrh += "> What would LOL be?\n"
