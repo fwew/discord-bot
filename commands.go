@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -165,16 +166,49 @@ func that(ctx *dgc.Ctx) {
 
 func cameronWords(ctx *dgc.Ctx) {
 	var output string = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
-	" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
-	" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
-	"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
-	" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
-	"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
-	" Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
-	"- **Life:** Atokirina', Ikran, Palulukan," +
-	" Riti, talioang, teylu, Toruk\n" +
-	"- **Other:** eyk, irayo, makto, taron, te"
+		" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
+		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
+		"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
+		" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
+		"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
+		" Iknimaya, mikyun, ontu, seyri, tsaheylu, tsahìk, unil\n" +
+		"- **Life:** Atokirina', Ikran, Palulukan," +
+		" Riti, talioang, teylu, Toruk\n" +
+		"- **Other:** eyk, irayo, makto, taron, te"
 	sendDiscordMessageEmbed(ctx, output, false)
+}
+
+// Helper function for phoneme_frequency
+func chart_entry(entry string, amount string, length int) (output string) {
+	output = entry
+	for i := utf8.RuneCountInString(entry); i < length-utf8.RuneCountInString(amount); i++ {
+		output += " "
+	}
+	output += amount + "|"
+	return output
+}
+
+// helper classes for phoneme_frequency
+type phoneme struct {
+	Freq int
+	Name string
+}
+
+type phonemes []phoneme
+
+func (e phonemes) Len() int {
+	return len(e)
+}
+
+func (e phonemes) Less(i, j int) bool {
+	if e[i].Freq == e[j].Freq {
+		return e[i].Name < e[j].Name
+	}
+	return e[i].Freq > e[j].Freq
+}
+
+func (e phonemes) Swap(i, j int) {
+	e[i], e[j] = e[j], e[i]
 }
 
 func registerCommands(router *dgc.Router) {
@@ -329,7 +363,72 @@ func registerCommands(router *dgc.Router) {
 					navi = fwew.TranslateToNavi(arg, langCode)
 				} else {
 					var err error
-					navi, err = fwew.TranslateFromNavi(arg)
+					navi, err = fwew.TranslateFromNavi(arg, true)
+					if err != nil {
+						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
+					}
+				}
+				words[j] = navi
+				wordFound = true
+			}
+
+			if wordFound {
+				sendWordDiscordEmbed(ctx, words)
+			}
+		},
+	})
+
+	// translation and skipping any affix checks
+	router.RegisterCmd(&dgc.Command{
+		Name: "fwew-simple",
+		Aliases: []string{
+			"search",
+			"translate",
+			"trans",
+		},
+		Description: "Translate a word (no checking for affixes)",
+		Usage:       "fwew-simple <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
+		Example:     "fwew-simple uturu",
+		Flags: []string{
+			"params",
+			"statistic",
+		},
+		IgnoreCase:  false,
+		SubCommands: nil,
+		Handler: func(ctx *dgc.Ctx) {
+			arguments := ctx.Arguments
+
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
+			// Don't run if firstArg is not set (we have nothing to do in that case)
+			firstArgTemp, b := ctx.CustomObjects.Get("firstArg")
+			if !b {
+				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
+				return
+			}
+
+			firstArg := firstArgTemp.(int)
+			amount := arguments.Amount() - firstArg
+			words := make([][]fwew.Word, amount)
+
+			langCode := ctx.CustomObjects.MustGet("langCode").(string)
+
+			var wordFound bool
+
+			// all params are words to search
+			for i, j := firstArg, 0; i < arguments.Amount(); i, j = i+1, j+1 {
+				arg := arguments.Get(i).Raw()
+
+				var navi []fwew.Word
+				if ctx.CustomObjects.MustGet("reverse").(bool) {
+					navi = fwew.TranslateToNavi(arg, langCode)
+				} else {
+					var err error
+					navi, err = fwew.TranslateFromNavi(arg, false)
 					if err != nil {
 						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 					}
@@ -502,11 +601,112 @@ func registerCommands(router *dgc.Router) {
 		Handler:     that,
 	})
 
-	// command to show wordes James Cameron invented
+	// command to show words James Cameron invented
 	router.RegisterCmd(&dgc.Command{
 		Name:        "Cameron Words",
 		Description: "Show words James Cameron invented",
 		IgnoreCase:  true,
 		Handler:     cameronWords,
+	})
+
+	// command to show how often each phoneme appears
+	router.RegisterCmd(&dgc.Command{
+		Name:        "phoneme-frequency",
+		Description: "Show how often a phoneme appears",
+		IgnoreCase:  true,
+		Handler: func(ctx *dgc.Ctx) {
+			all_frequencies := fwew.GetPhonemeDistrosMap()
+			entries := []string{"| Onset:|Nuclei:|Ending:|", "|=======|=======|=======|"}
+
+			onset_letters := [21]string{"t", "", "n", "k", "l", "s", "'", "p", "r", "y",
+				"ts", "m", "tx", "v", "w", "h", "ng", "z", "kx", "px", "f"}
+			nucleus_letters := [14]string{"a", "e", "ì", "o", "u", "i", "ä", "aw", "ey", "ù", "rr", "ay", "ew", "ll"}
+			coda_letters := [13]string{"", "n", "m", "ng", "l", "k", "p", "'", "r", "t", "kx", "px", "tx"}
+
+			// Onsets
+			onset_tuples := []phoneme{}
+			for i := 0; i < len(onset_letters); i++ {
+				var a phoneme
+				a.Name = onset_letters[i]
+				a.Freq = all_frequencies["Others"]["Onsets"][onset_letters[i]]
+				onset_tuples = append(onset_tuples, a)
+			}
+
+			sort.Sort(phonemes(onset_tuples))
+
+			for i := 0; i < len(onset_tuples); i++ {
+				entries = append(entries, "|"+chart_entry(onset_tuples[i].Name, strconv.Itoa(onset_tuples[i].Freq), 7))
+			}
+
+			// Nuclei
+			nuclei_tuples := []phoneme{}
+			for i := 0; i < len(nucleus_letters); i++ {
+				var a phoneme
+				a.Name = nucleus_letters[i]
+				a.Freq = all_frequencies["Others"]["Nuclei"][nucleus_letters[i]]
+				nuclei_tuples = append(nuclei_tuples, a)
+			}
+
+			sort.Sort(phonemes(nuclei_tuples))
+
+			i := 2
+			for ; i < len(nuclei_tuples)+2; i++ {
+				entries[i] += chart_entry(nuclei_tuples[i-2].Name, strconv.Itoa(nuclei_tuples[i-2].Freq), 7)
+			}
+			for ; i < len(entries); i++ {
+				entries[i] += "       |"
+			}
+
+			// Ends
+			codaTuples := []phoneme{}
+			for i := 0; i < len(coda_letters); i++ {
+				var a phoneme
+				a.Name = coda_letters[i]
+				a.Freq = all_frequencies["Others"]["Codas"][coda_letters[i]]
+				codaTuples = append(codaTuples, a)
+			}
+
+			sort.Sort(phonemes(codaTuples))
+
+			i = 2
+			for ; i < len(codaTuples)+2; i++ {
+				entries[i] += chart_entry(codaTuples[i-2].Name, strconv.Itoa(codaTuples[i-2].Freq), 7)
+			}
+			for ; i < len(entries); i++ {
+				entries[i] += "       |"
+			}
+
+			// Top
+			//entries_2 = "## Phoneme distributions:\n```\n"
+			entries = append(entries, "")
+			entries = append(entries, "Clusters:")
+			entries = append(entries, "  | f:| s:|ts:|")
+			entries = append(entries, "==|===|===|===|")
+
+			// Clusters
+			cluster_starts := []string{"f", "s", "ts"}
+			cluster_ends := []string{"k", "kx", "l", "m", "n", "ng", "p", "px", "r", "t", "tx", "w", "y"}
+
+			for i := 0; i < len(cluster_ends); i++ {
+				entries = append(entries, chart_entry("", cluster_ends[i], 2))
+			}
+
+			// clusters
+			for i := 0; i < len(cluster_starts); i++ {
+				for j := 0; j < len(cluster_ends); j++ {
+					entries[j+len(entries)-len(cluster_ends)] += chart_entry("", strconv.Itoa(all_frequencies["Clusters"][cluster_starts[i]][cluster_ends[j]]), 3)
+				}
+			}
+
+			results := "```\n"
+
+			for i := 0; i < len(entries); i++ {
+				results += entries[i] + "\n"
+			}
+
+			results += "```"
+
+			sendDiscordMessageEmbed(ctx, results, false)
+		},
 	})
 }
