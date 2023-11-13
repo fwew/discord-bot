@@ -50,7 +50,7 @@ func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
 		return
 	}
 
-	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+	send1dWordDiscordEmbed(ctx, words)
 }
 
 func list(ctx *dgc.Ctx, firstArg int) {
@@ -69,7 +69,7 @@ func list(ctx *dgc.Ctx, firstArg int) {
 		return
 	}
 
-	sendWordDiscordEmbed(ctx, [][]fwew.Word{words})
+	send1dWordDiscordEmbed(ctx, words)
 }
 
 func lenition(ctx *dgc.Ctx) {
@@ -284,9 +284,9 @@ func registerCommands(router *dgc.Router) {
 			"translate",
 			"trans",
 		},
-		Description: "Translate a word",
-		Usage:       "fwew <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
-		Example:     "fwew kaltxì",
+		Description: "Translate a word or several",
+		Usage:       "fwew <word>...\n<word>:\n  - A word to translate\n  - With `-r`: A locale word to translate",
+		Example:     "fwew kaltxì run",
 		Flags: []string{
 			"params",
 			"statistic",
@@ -310,83 +310,67 @@ func registerCommands(router *dgc.Router) {
 			}
 
 			firstArg := firstArgTemp.(int)
-			amount := arguments.Amount() - firstArg
-			words := make([][]fwew.Word, amount)
 
 			langCode := ctx.CustomObjects.MustGet("langCode").(string)
 
-			var wordFound bool
-
 			// all params are words to search
-			for i, j := firstArg, 0; i < arguments.Amount(); i, j = i+1, j+1 {
-				arg := arguments.Get(i).Raw()
+			arg := arguments.Get(0).Raw()
 
-				// on first arg, check if this is a known command and fwew-bot is used like the old version
-				if j == 0 {
-					if strings.HasPrefix(arg, "/") {
-						switch arg {
-						case "/random":
-							random(arguments, firstArg+1, ctx)
-						case "/list":
-							list(ctx, firstArg+1)
-						case "/version":
-							sendDiscordMessageEmbed(ctx, Version.String(), false)
-						case "/lenition":
-							fallthrough
-						case "/len":
-							lenition(ctx)
-						case "/that":
-							that(ctx)
-						case "/cameronWords":
-							cameronWords(ctx)
-						default:
-							// unknown command error
-							sendEmbed(ctx, ctx.Command.Name, "I don't know this subcommand :(", true)
-						}
-
-						break
-					}
+			// on first arg, check if this is a known command and fwew-bot is used like the old version
+			if strings.HasPrefix(arg, "/") {
+				switch arg {
+				case "/random":
+					random(arguments, firstArg+1, ctx)
+				case "/list":
+					list(ctx, firstArg+1)
+				case "/version":
+					sendDiscordMessageEmbed(ctx, Version.String(), false)
+				case "/lenition":
+					fallthrough
+				case "/len":
+					lenition(ctx)
+				case "/that":
+					that(ctx)
+				case "/cameronWords":
+					cameronWords(ctx)
+				default:
+					// unknown command error
+					sendEmbed(ctx, ctx.Command.Name, "I don't know this subcommand :(", true)
 				}
-
-				// hardcoded stuff override (will send an additional message)
-				if arg == "hrh" {
-					// KP "HRH" video
-					hrh := "https://youtu.be/-AgnLH7Dw3w?t=274\n"
-					hrh += "> What would LOL be?\n"
-					hrh += "> It would have to do with the word herangham... maybe HRH"
-					sendDiscordMessageEmbed(ctx, hrh, false)
-					continue
-				}
-
-				var navi []fwew.Word
-				if ctx.CustomObjects.MustGet("reverse").(bool) {
-					navi = fwew.TranslateToNavi(arg, langCode)
-				} else {
-					var err error
-					navi, err = fwew.TranslateFromNavi(arg, true)
-					if err != nil {
-						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
-					}
-				}
-				words[j] = navi
-				wordFound = true
 			}
 
-			if wordFound {
-				sendWordDiscordEmbed(ctx, words)
+			// hardcoded stuff override (will send an additional message)
+			if strings.ToLower(arg) == "hrh" {
+				// KP "HRH" video
+				hrh := "https://youtu.be/-AgnLH7Dw3w?t=274\n"
+				hrh += "> What would LOL be?\n"
+				hrh += "> It would have to do with the word herangham... maybe HRH"
+				sendDiscordMessageEmbed(ctx, hrh, false)
+				//continue
 			}
+
+			argString := ""
+			for i := 0; i < arguments.Amount(); i++ {
+				argString += arguments.Get(i).Raw() + " "
+			}
+			argString = argString[:len(argString)-1]
+
+			var navi [][]fwew.Word
+
+			var err error
+			navi, err = fwew.BidirectionalSearch(argString, true, langCode)
+			if err != nil {
+				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
+			}
+
+			sendWordDiscordEmbed(ctx, navi)
 		},
 	})
 
 	// translation and skipping any affix checks
 	router.RegisterCmd(&dgc.Command{
-		Name: "fwew-simple",
-		Aliases: []string{
-			"search",
-			"translate",
-			"trans",
-		},
-		Description: "Translate a word (no checking for affixes)",
+		Name:        "fwew-simple",
+		Description: "Translate a word (no checking for affixes or natural language words)",
 		Usage:       "fwew-simple <word>...\n<word>:\n  - A Na'vi word to translate\n  - With `-r`: A locale word to translate",
 		Example:     "fwew-simple uturu",
 		Flags: []string{
@@ -420,22 +404,24 @@ func registerCommands(router *dgc.Router) {
 			var wordFound bool
 
 			// all params are words to search
-			for i, j := firstArg, 0; i < arguments.Amount(); i, j = i+1, j+1 {
-				arg := arguments.Get(i).Raw()
-
-				var navi []fwew.Word
-				if ctx.CustomObjects.MustGet("reverse").(bool) {
-					navi = fwew.TranslateToNavi(arg, langCode)
-				} else {
-					var err error
-					navi, err = fwew.TranslateFromNavi(arg, false)
-					if err != nil {
-						sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
-					}
-				}
-				words[j] = navi
-				wordFound = true
+			argString := ""
+			for i := 0; i < arguments.Amount(); i++ {
+				argString += arguments.Get(i).Raw() + " "
 			}
+			argString = argString[:len(argString)-1]
+
+			var navi [][]fwew.Word
+			if ctx.CustomObjects.MustGet("reverse").(bool) {
+				navi = fwew.TranslateToNaviHash(argString, langCode)
+			} else {
+				var err error
+				navi, err = fwew.TranslateFromNaviHash(argString, false)
+				if err != nil {
+					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
+				}
+			}
+			words = navi
+			wordFound = true
 
 			if wordFound {
 				sendWordDiscordEmbed(ctx, words)
