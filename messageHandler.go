@@ -154,12 +154,14 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 	for i, words := range words {
 		if len(words) == 0 {
 			outTemp += fwew.Text("none")
+			continue
 		}
-		for j, word := range words {
+		outTemp += "**" + words[0].Navi + ":**\n"
+		j := 1
+		for j < len(words) {
+			word := words[j]
+
 			iString := strconv.Itoa(i + 1)
-			if len(words) > 1 {
-				iString += "-" + strconv.Itoa(j+1)
-			}
 			line, err := word.ToOutputLine(
 				iString,
 				true, // were discord-bot, always with markdown
@@ -180,6 +182,7 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 				output = append(output, outTemp)
 				outTemp = ""
 			}
+			j += 1
 			outTemp += line
 		}
 		outTemp += "\n"
