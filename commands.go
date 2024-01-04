@@ -44,7 +44,7 @@ func random(arguments *dgc.Arguments, firstArg int, ctx *dgc.Ctx) {
 	}
 
 	// Get random words out of dictionary
-	words, err := fwew.Random(amount, restArgs)
+	words, err := fwew.Random(amount, restArgs, uint8(1))
 	if err != nil {
 		sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error getting random words: %s", err), true)
 		return
@@ -63,7 +63,7 @@ func list(ctx *dgc.Ctx, firstArg int) {
 		args = append(args, argument.Raw())
 	}
 
-	words, err := fwew.List(args)
+	words, err := fwew.List(args, uint8(1))
 	if err != nil {
 		sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error executing list command: %s", err), true)
 		return
