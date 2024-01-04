@@ -12,8 +12,8 @@ require (
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/karrick/tparse/v2 v2.8.1 // indirect
 	github.com/zekroTJA/timedmap v0.0.0-20200518230343-de9b879d109a // indirect
-	golang.org/x/crypto v0.1.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 )
 
 //for testing on a local machine's fwew-lib
