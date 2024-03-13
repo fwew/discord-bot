@@ -86,7 +86,7 @@ func main() {
 	}
 
 	// set custom status
-	err = session.UpdateStatus(0, "DM me to look up Na'vi words")
+	err = session.UpdateGameStatus(0, "DM me to look up Na'vi words")
 	if err != nil {
 		panic(err)
 	}
