@@ -85,8 +85,10 @@ func lenition(ctx *dgc.Ctx) {
 		if lenition[1] == "" {
 			lenition[1] = "(disappears, except before ll or rr)"
 		}
-		output += "→ " + lenition[1] + "\n"
+		output += "→ " + lenition[1] + "\n\n"
 	}
+	output += "leniting prefixes: me+, pxe+, ay+, pe+\n"
+	output += "leniting adpositions: fpi, ìlä, lisre, mì, nuä, pxisre, ro, sko, sre, wä\n"
 	output += "```"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
@@ -104,8 +106,10 @@ func shortLenition(ctx *dgc.Ctx) {
 		if lenition[1] == "" {
 			lenition[1] = "(disappears, except before ll or rr)"
 		}
-		output += " → " + lenition[1] + "\n"
+		output += " → " + lenition[1] + "\n\n"
 	}
+	output += "leniting prefixes: me+, pxe+, ay+, pe+\n"
+	output += "leniting adpositions: fpi, ìlä, lisre, mì, nuä, pxisre, ro, sko, sre, wä\n"
 	output += "```"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
