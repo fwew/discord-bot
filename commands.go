@@ -699,4 +699,35 @@ func registerCommands(router *dgc.Router) {
 			sendDiscordMessageEmbed(ctx, results, false)
 		},
 	})
+
+	// Tell the user if given word(s) are valid in Na'vi
+	router.RegisterCmd(&dgc.Command{
+		Name:        "valid",
+		Description: "See if a word would be valid in Na'vi",
+		Usage:       "valid <word>...\n<word>:\n  - A word to validate",
+		Example:     "valid omati s'ampta",
+		Flags: []string{
+			"params",
+		},
+		IgnoreCase:  true,
+		SubCommands: nil,
+		Handler: func(ctx *dgc.Ctx) {
+			arguments := ctx.Arguments
+
+			defer func() {
+				if err := recover(); err != nil {
+					sendErrorWhenRecovered(ctx)
+				}
+			}()
+
+			argString := ""
+			for i := 0; i < arguments.Amount(); i++ {
+				argString += arguments.Get(i).Raw() + " "
+			}
+			argString = argString[:len(argString)-1]
+
+			navi := fwew.IsValidNavi(argString)
+			sendDiscordMessageEmbed(ctx, navi, false)
+		},
+	})
 }
