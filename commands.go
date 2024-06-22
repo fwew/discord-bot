@@ -191,14 +191,14 @@ func chart_entry(entry string, amount string, length int) (output string) {
 }
 
 func phonemeFrequency(ctx *dgc.Ctx) {
+	fmt.Println("Hi")
 	all_frequencies := fwew.GetPhonemeDistrosMap()
 
 	results := "```\n"
 
 	fmt.Println(len(all_frequencies))
 
-	for ia, a := range all_frequencies[0] {
-		fmt.Println(ia)
+	for _, a := range all_frequencies[0] {
 		results += "|"
 		for _, b := range a {
 			entries := strings.Split(b, " ")
@@ -213,18 +213,16 @@ func phonemeFrequency(ctx *dgc.Ctx) {
 
 	results += "\nClusters:\n"
 
-	for ia, a := range all_frequencies[1] {
-		fmt.Println(ia)
+	for _, a := range all_frequencies[1] {
+		new_line := ""
 		for _, b := range a {
-			results += chart_entry("", b, 3)
+			new_line += chart_entry("", b, 3)
 		}
-		results += "\n"
+		new_line = strings.TrimPrefix(new_line, " ")
+		results += new_line + "\n"
 	}
 
 	results += "```"
-
-	fmt.Println(results)
-	fmt.Println(len(results))
 
 	sendDiscordMessageEmbed(ctx, results, false)
 }
