@@ -190,6 +190,45 @@ func chart_entry(entry string, amount string, length int) (output string) {
 	return output
 }
 
+func phonemeFrequency(ctx *dgc.Ctx) {
+	all_frequencies := fwew.GetPhonemeDistrosMap()
+
+	results := "```\n"
+
+	fmt.Println(len(all_frequencies))
+
+	for ia, a := range all_frequencies[0] {
+		fmt.Println(ia)
+		results += "|"
+		for _, b := range a {
+			entries := strings.Split(b, " ")
+			if len(entries) == 2 {
+				results += chart_entry(entries[0], entries[1], 8)
+			} else {
+				results += chart_entry("", b, 8)
+			}
+		}
+		results += "\n"
+	}
+
+	results += "\nClusters:\n"
+
+	for ia, a := range all_frequencies[1] {
+		fmt.Println(ia)
+		for _, b := range a {
+			results += chart_entry("", b, 3)
+		}
+		results += "\n"
+	}
+
+	results += "```"
+
+	fmt.Println(results)
+	fmt.Println(len(results))
+
+	sendDiscordMessageEmbed(ctx, results, false)
+}
+
 func registerCommands(router *dgc.Router) {
 	// Random command
 	router.RegisterCmd(&dgc.Command{
@@ -575,41 +614,7 @@ func registerCommands(router *dgc.Router) {
 		Name:        "phoneme-frequency",
 		Description: "Show how often a phoneme appears",
 		IgnoreCase:  true,
-		Handler: func(ctx *dgc.Ctx) {
-			all_frequencies := fwew.GetPhonemeDistrosMap()
-			//entries := []string{"| Onset:|Nuclei:|Ending:|", "|=======|=======|=======|"}
-
-			results := "```\n"
-
-			for _, a := range all_frequencies[0] {
-				results += "|"
-				for _, b := range a {
-					entries := strings.Split(b, " ")
-					if len(entries) == 2 {
-						results += chart_entry(entries[0], entries[1], 8)
-					} else {
-						results += chart_entry("", b, 8)
-					}
-				}
-				results += "\n"
-			}
-
-			results += "\nClusters:\n"
-
-			for _, a := range all_frequencies[1] {
-				for _, b := range a {
-					results += chart_entry("", b, 3)
-				}
-				results += "\n"
-			}
-
-			results += "```"
-
-			fmt.Println(results)
-			fmt.Println(len(results))
-
-			sendDiscordMessageEmbed(ctx, results, false)
-		},
+		Handler:     phonemeFrequency,
 	})
 
 	// Tell the user if given word(s) are valid in Na'vi
