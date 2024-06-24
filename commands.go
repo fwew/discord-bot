@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -116,7 +115,6 @@ func shortLenition(ctx *dgc.Ctx) {
 
 func that(ctx *dgc.Ctx) {
 	thatTable := fwew.GetThatTable()
-	const leftSize = 3
 	var output string
 	output += "```\n"
 
@@ -192,27 +190,41 @@ func chart_entry(entry string, amount string, length int) (output string) {
 	return output
 }
 
-// helper classes for phoneme_frequency
-type phoneme struct {
-	Freq int
-	Name string
-}
+func phonemeFrequency(ctx *dgc.Ctx) {
+	fmt.Println("Hi")
+	all_frequencies := fwew.GetPhonemeDistrosMap()
 
-type phonemes []phoneme
+	results := "```\n"
 
-func (e phonemes) Len() int {
-	return len(e)
-}
+	fmt.Println(len(all_frequencies))
 
-func (e phonemes) Less(i, j int) bool {
-	if e[i].Freq == e[j].Freq {
-		return e[i].Name < e[j].Name
+	for _, a := range all_frequencies[0] {
+		results += "|"
+		for _, b := range a {
+			entries := strings.Split(b, " ")
+			if len(entries) == 2 {
+				results += chart_entry(entries[0], entries[1], 8)
+			} else {
+				results += chart_entry("", b, 8)
+			}
+		}
+		results += "\n"
 	}
-	return e[i].Freq > e[j].Freq
-}
 
-func (e phonemes) Swap(i, j int) {
-	e[i], e[j] = e[j], e[i]
+	results += "\nClusters:\n"
+
+	for _, a := range all_frequencies[1] {
+		new_line := ""
+		for _, b := range a {
+			new_line += chart_entry("", b, 3)
+		}
+		new_line = strings.TrimPrefix(new_line, " ")
+		results += new_line + "\n"
+	}
+
+	results += "```"
+
+	sendDiscordMessageEmbed(ctx, results, false)
 }
 
 func registerCommands(router *dgc.Router) {
@@ -393,15 +405,11 @@ func registerCommands(router *dgc.Router) {
 			}()
 
 			// Don't run if firstArg is not set (we have nothing to do in that case)
-			firstArgTemp, b := ctx.CustomObjects.Get("firstArg")
+			_, b := ctx.CustomObjects.Get("firstArg")
 			if !b {
 				sendDiscordMessageEmbed(ctx, "Nothing found to translate!", true)
 				return
 			}
-
-			firstArg := firstArgTemp.(int)
-			amount := arguments.Amount() - firstArg
-			words := make([][]fwew.Word, amount)
 
 			langCode := ctx.CustomObjects.MustGet("langCode").(string)
 
@@ -424,7 +432,7 @@ func registerCommands(router *dgc.Router) {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 				}
 			}
-			words = navi
+			words := navi
 			wordFound = true
 
 			if wordFound {
@@ -442,10 +450,10 @@ func registerCommands(router *dgc.Router) {
 		},
 		Description: "Translate a number to Navi and vice-versa",
 		Usage: `number <number>
-<number>:
-  - an octal number to translate to Na'vi
-  - the Na'vi word of a number, to read the number
-`,
+				<number>:
+				- an octal number to translate to Na'vi
+				- the Na'vi word of a number, to read the number
+				`,
 		Example: "number 55",
 		Flags: []string{
 			"params",
@@ -604,100 +612,7 @@ func registerCommands(router *dgc.Router) {
 		Name:        "phoneme-frequency",
 		Description: "Show how often a phoneme appears",
 		IgnoreCase:  true,
-		Handler: func(ctx *dgc.Ctx) {
-			all_frequencies := fwew.GetPhonemeDistrosMap()
-			entries := []string{"| Onset:|Nuclei:|Ending:|", "|=======|=======|=======|"}
-
-			onset_letters := [21]string{"t", "", "n", "k", "l", "s", "'", "p", "r", "y",
-				"ts", "m", "tx", "v", "w", "h", "ng", "z", "kx", "px", "f"}
-			nucleus_letters := [14]string{"a", "e", "ì", "o", "u", "i", "ä", "aw", "ey", "ù", "rr", "ay", "ew", "ll"}
-			coda_letters := [13]string{"", "n", "m", "ng", "l", "k", "p", "'", "r", "t", "kx", "px", "tx"}
-
-			// Onsets
-			onset_tuples := []phoneme{}
-			for i := 0; i < len(onset_letters); i++ {
-				var a phoneme
-				a.Name = onset_letters[i]
-				a.Freq = all_frequencies["Others"]["Onsets"][onset_letters[i]]
-				onset_tuples = append(onset_tuples, a)
-			}
-
-			sort.Sort(phonemes(onset_tuples))
-
-			for i := 0; i < len(onset_tuples); i++ {
-				entries = append(entries, "|"+chart_entry(onset_tuples[i].Name, strconv.Itoa(onset_tuples[i].Freq), 7))
-			}
-
-			// Nuclei
-			nuclei_tuples := []phoneme{}
-			for i := 0; i < len(nucleus_letters); i++ {
-				var a phoneme
-				a.Name = nucleus_letters[i]
-				a.Freq = all_frequencies["Others"]["Nuclei"][nucleus_letters[i]]
-				nuclei_tuples = append(nuclei_tuples, a)
-			}
-
-			sort.Sort(phonemes(nuclei_tuples))
-
-			i := 2
-			for ; i < len(nuclei_tuples)+2; i++ {
-				entries[i] += chart_entry(nuclei_tuples[i-2].Name, strconv.Itoa(nuclei_tuples[i-2].Freq), 7)
-			}
-			for ; i < len(entries); i++ {
-				entries[i] += "       |"
-			}
-
-			// Ends
-			codaTuples := []phoneme{}
-			for i := 0; i < len(coda_letters); i++ {
-				var a phoneme
-				a.Name = coda_letters[i]
-				a.Freq = all_frequencies["Others"]["Codas"][coda_letters[i]]
-				codaTuples = append(codaTuples, a)
-			}
-
-			sort.Sort(phonemes(codaTuples))
-
-			i = 2
-			for ; i < len(codaTuples)+2; i++ {
-				entries[i] += chart_entry(codaTuples[i-2].Name, strconv.Itoa(codaTuples[i-2].Freq), 7)
-			}
-			for ; i < len(entries); i++ {
-				entries[i] += "       |"
-			}
-
-			// Top
-			//entries_2 = "## Phoneme distributions:\n```\n"
-			entries = append(entries, "")
-			entries = append(entries, "Clusters:")
-			entries = append(entries, "  | f:| s:|ts:|")
-			entries = append(entries, "==|===|===|===|")
-
-			// Clusters
-			cluster_starts := []string{"f", "s", "ts"}
-			cluster_ends := []string{"k", "kx", "l", "m", "n", "ng", "p", "px", "r", "t", "tx", "w", "y"}
-
-			for i := 0; i < len(cluster_ends); i++ {
-				entries = append(entries, chart_entry("", cluster_ends[i], 2))
-			}
-
-			// clusters
-			for i := 0; i < len(cluster_starts); i++ {
-				for j := 0; j < len(cluster_ends); j++ {
-					entries[j+len(entries)-len(cluster_ends)] += chart_entry("", strconv.Itoa(all_frequencies["Clusters"][cluster_starts[i]][cluster_ends[j]]), 3)
-				}
-			}
-
-			results := "```\n"
-
-			for i := 0; i < len(entries); i++ {
-				results += entries[i] + "\n"
-			}
-
-			results += "```"
-
-			sendDiscordMessageEmbed(ctx, results, false)
-		},
+		Handler:     phonemeFrequency,
 	})
 
 	// Tell the user if given word(s) are valid in Na'vi
