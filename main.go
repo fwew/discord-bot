@@ -68,10 +68,11 @@ func main() {
 	fwew.StartEverything()
 
 	// cache fwew dictionary
-	err = fwew.CacheDictHash()
-	if err != nil {
-		panic(err)
-	}
+	// fwew.StartEverything() already does this
+	// err = fwew.CacheDictHash()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	// create discord session
 	session, err := discordgo.New("Bot " + config.Token)

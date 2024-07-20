@@ -94,3 +94,4 @@ conf.json
 **dictionary-v2.txt
 bin
 fwew-discord-bot
+.env
