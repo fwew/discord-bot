@@ -529,7 +529,7 @@ func registerCommands(router *dgc.Router) {
 		Description: "Show information about the params, that can be used with \"fwew\", \"list\" and \"random\"",
 		Handler: func(ctx *dgc.Ctx) {
 			info := "`fwew`, `list` and `random` can have additional optional parameters.\n" +
-				"  - `-l=<langCode>`: Set the language (de, en, et, fr, hu, nl, pl, ru, sv, tr). Default: en\n" +
+				"  - `-l=<langCode>`: Set the language (de, en, es, et, fr, hu, ko, nl, pl, pt, ru, sv, tr, uk). Default: en\n" +
 				"  - `-r`: `fwew` only param, that will mark the translation \"reversed\". If set, translation will be from locale to Na'vi\n" +
 				"  - `-i`: Show Infix locations with brackets\n" +
 				"  - `-id=false`: Don't show infix dots\n" +
