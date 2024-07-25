@@ -167,7 +167,7 @@ func that(ctx *dgc.Ctx) {
 }
 
 func cameronWords(ctx *dgc.Ctx) {
-	var output string = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
+	var output = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
 		" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
 		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
 		"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
@@ -181,7 +181,7 @@ func cameronWords(ctx *dgc.Ctx) {
 }
 
 // Helper function for phoneme_frequency
-func chart_entry(entry string, amount string, length int) (output string) {
+func chartEntry(entry string, amount string, length int) (output string) {
 	output = entry
 	for i := utf8.RuneCountInString(entry); i < length-utf8.RuneCountInString(amount); i++ {
 		output += " "
@@ -200,9 +200,9 @@ func phonemeFrequency(ctx *dgc.Ctx) {
 		for _, b := range a {
 			entries := strings.Split(b, " ")
 			if len(entries) == 2 {
-				results += chart_entry(entries[0], entries[1], 8)
+				results += chartEntry(entries[0], entries[1], 8)
 			} else {
-				results += chart_entry("", b, 8)
+				results += chartEntry("", b, 8)
 			}
 		}
 		results += "\n"
@@ -213,10 +213,10 @@ func phonemeFrequency(ctx *dgc.Ctx) {
 	for _, a := range all_frequencies[1] {
 		new_line := ""
 		for _, b := range a {
-			new_line += chart_entry("", b, 3)
+			newLine += chartEntry("", b, 3)
 		}
-		new_line = strings.TrimPrefix(new_line, " ")
-		results += new_line + "\n"
+		newLine = strings.TrimPrefix(newLine, " ")
+		results += newLine + "\n"
 	}
 
 	results += "```"
@@ -481,12 +481,12 @@ func registerCommands(router *dgc.Router) {
 			arg := argument.Raw()
 
 			// check if arg starts with number
-			var rune rune
+			var argRune rune
 			for _, r := range arg {
-				rune = r
+				argRune = r
 				break
 			}
-			if rune >= '0' && rune <= '9' {
+			if argRune >= '0' && argRune <= '9' {
 				// try to get number of it
 				argInt, err := strconv.ParseInt(arg, 0, 16)
 				if err != nil {
@@ -526,7 +526,7 @@ func registerCommands(router *dgc.Router) {
 		Description: "Show information about the params, that can be used with \"fwew\", \"list\" and \"random\"",
 		Handler: func(ctx *dgc.Ctx) {
 			info := "`fwew`, `list` and `random` can have additional optional parameters.\n" +
-				"  - `-l=<langCode>`: Set the language (de, en, et, fr, hu, nl, pl, ru, sv, tr). Default: en\n" +
+				"  - `-l=<langCode>`: Set the language (de, en, es, et, fr, hu, ko, nl, pl, pt, ru, sv, tr, uk). Default: en\n" +
 				"  - `-r`: `fwew` only param, that will mark the translation \"reversed\". If set, translation will be from locale to Na'vi\n" +
 				"  - `-i`: Show Infix locations with brackets\n" +
 				"  - `-id=false`: Don't show infix dots\n" +
@@ -588,7 +588,7 @@ func registerCommands(router *dgc.Router) {
 		Handler:     shortLenition,
 	})
 
-	// command to show all possible thats
+	// command to show all possible "that"s
 	router.RegisterCmd(&dgc.Command{
 		Name:        "that",
 		Description: "Show all possible thats",
