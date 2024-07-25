@@ -192,7 +192,9 @@ func chartEntry(entry string, amount string, length int) (output string) {
 
 func phonemeFrequency(ctx *dgc.Ctx) {
 	fmt.Println("Hi")
-	allFrequencies := fwew.GetPhonemeDistrosMap()
+
+	langCode := ctx.CustomObjects.MustGet("langCode").(string)
+	all_frequencies := fwew.GetPhonemeDistrosMap(langCode)
 
 	results := "```\n"
 
