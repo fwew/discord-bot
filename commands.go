@@ -191,16 +191,11 @@ func chartEntry(entry string, amount string, length int) (output string) {
 }
 
 func phonemeFrequency(ctx *dgc.Ctx) {
-	fmt.Println("Hi")
-
-	langCode := ctx.CustomObjects.MustGet("langCode").(string)
-	all_frequencies := fwew.GetPhonemeDistrosMap(langCode)
+	all_frequencies := fwew.GetPhonemeDistrosMap("en") // English only
 
 	results := "```\n"
 
-	fmt.Println(len(allFrequencies))
-
-	for _, a := range allFrequencies[0] {
+	for _, a := range all_frequencies[0] {
 		results += "|"
 		for _, b := range a {
 			entries := strings.Split(b, " ")
@@ -215,8 +210,8 @@ func phonemeFrequency(ctx *dgc.Ctx) {
 
 	results += "\nClusters:\n"
 
-	for _, a := range allFrequencies[1] {
-		newLine := ""
+	for _, a := range all_frequencies[1] {
+		new_line := ""
 		for _, b := range a {
 			newLine += chartEntry("", b, 3)
 		}
