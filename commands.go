@@ -208,7 +208,8 @@ func phonemeFrequency(ctx *dgc.Ctx) {
 		results += "\n"
 	}
 
-	results += "\nClusters:\n"
+	results += "\n" + all_frequencies[1][0][0] + ":\n"
+	all_frequencies[1][0][0] = ""
 
 	for _, a := range all_frequencies[1] {
 		newLine := ""
