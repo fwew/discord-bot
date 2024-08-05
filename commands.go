@@ -169,7 +169,7 @@ func that(ctx *dgc.Ctx) {
 func cameronWords(ctx *dgc.Ctx) {
 	var output = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
 		" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
-		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
+		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey\n" +
 		"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
 		" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
 		"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
