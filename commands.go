@@ -169,7 +169,7 @@ func that(ctx *dgc.Ctx) {
 func cameronWords(ctx *dgc.Ctx) {
 	var output = "- **A1 Names:** Akwey, Ateyo, Eytukan, Eywa," +
 		" Mo'at, Na'vi, Newey, Neytiri, Ninat, Omatikaya," +
-		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey, Tsumongwi\n" +
+		" Otranyu, Rongloa, Silwanin, Tskaha, Tsu'tey\n" +
 		"- **A2 Names:** Aonung, Kiri, Lo'ak, Neteyam," +
 		" Ronal, Rotxo, Tonowari, Tuktirey, Tsireya\n" +
 		"- **Nouns:** 'itan, 'ite, atan, au *(drum)*, eyktan, i'en," +
@@ -191,14 +191,11 @@ func chartEntry(entry string, amount string, length int) (output string) {
 }
 
 func phonemeFrequency(ctx *dgc.Ctx) {
-	fmt.Println("Hi")
-	allFrequencies := fwew.GetPhonemeDistrosMap()
+	all_frequencies := fwew.GetPhonemeDistrosMap("en") // English only
 
 	results := "```\n"
 
-	fmt.Println(len(allFrequencies))
-
-	for _, a := range allFrequencies[0] {
+	for _, a := range all_frequencies[0] {
 		results += "|"
 		for _, b := range a {
 			entries := strings.Split(b, " ")
@@ -211,9 +208,10 @@ func phonemeFrequency(ctx *dgc.Ctx) {
 		results += "\n"
 	}
 
-	results += "\nClusters:\n"
+	results += "\n" + all_frequencies[1][0][0] + ":\n"
+	all_frequencies[1][0][0] = ""
 
-	for _, a := range allFrequencies[1] {
+	for _, a := range all_frequencies[1] {
 		newLine := ""
 		for _, b := range a {
 			newLine += chartEntry("", b, 3)
@@ -641,7 +639,7 @@ func registerCommands(router *dgc.Router) {
 			}
 			argString = argString[:len(argString)-1]
 
-			navi := fwew.IsValidNavi(argString)
+			navi := fwew.IsValidNavi(argString, "en") // Not sure how to enable language support easily
 			sendDiscordMessageEmbed(ctx, navi, false)
 		},
 	})
