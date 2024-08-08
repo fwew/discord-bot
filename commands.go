@@ -639,7 +639,7 @@ func registerCommands(router *dgc.Router) {
 			}
 			argString = argString[:len(argString)-1]
 
-			navi := fwew.IsValidNavi(argString)
+			navi := fwew.IsValidNavi(argString, "en") // Not sure how to enable language support easily
 			sendDiscordMessageEmbed(ctx, navi, false)
 		},
 	})
