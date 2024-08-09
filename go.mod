@@ -1,10 +1,12 @@
 module fwew-discord-bot
 
-go 1.20
+go 1.22
+
+toolchain go1.22.0
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
-	github.com/fwew/fwew-lib/v5 v5.17.1
+	github.com/fwew/fwew-lib/v5 v5.18.2
 	github.com/knoxfighter/dgc v0.0.0-20201030020537-397f394c484d
 )
 
