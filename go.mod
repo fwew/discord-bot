@@ -2,7 +2,7 @@ module fwew-discord-bot
 
 go 1.22
 
-toolchain go1.22.0
+toolchain go1.22.4
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
@@ -22,4 +22,4 @@ require (
 )
 
 //for testing on a local machine's fwew-lib
-//replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
+replace github.com/fwew/fwew-lib/v5 => ../fwew-lib
