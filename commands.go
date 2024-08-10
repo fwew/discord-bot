@@ -191,7 +191,7 @@ func chartEntry(entry string, amount string, length int) (output string) {
 }
 
 func phonemeFrequency(ctx *dgc.Ctx) {
-	all_frequencies := fwew.GetPhonemeDistrosMap() // English only
+	all_frequencies := fwew.GetPhonemeDistrosMap("en") // English only
 
 	results := "```\n"
 
@@ -639,7 +639,7 @@ func registerCommands(router *dgc.Router) {
 			}
 			argString = argString[:len(argString)-1]
 
-			navi := fwew.IsValidNavi(argString) // Not sure how to enable language support easily
+			navi := fwew.IsValidNavi(argString, "en") // Not sure how to enable language support easily
 			sendDiscordMessageEmbed(ctx, navi, false)
 		},
 	})
