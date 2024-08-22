@@ -36,8 +36,8 @@ func setDefaultLanguage(ctx *dgc.Ctx) {
 		ctx.CustomObjects.Set("langCode", "fr")
 	case "1065673594354548757":
 		ctx.CustomObjects.Set("langCode", "ru")
-  case "1063774395748847648":
-    ctx.CustomObjects.Set("langCode", "ru")
+	case "1063774395748847648":
+		ctx.CustomObjects.Set("langCode", "ru")
 	}
 }
 
@@ -67,6 +67,7 @@ func addMiddleware(router *dgc.Router) {
 			ctx.CustomObjects.Set("showSource", false)   // don't show source
 			ctx.CustomObjects.Set("showDashed", true)    // don't show syllable stress
 			ctx.CustomObjects.Set("showIPA", false)      // don't show IPA data
+			ctx.CustomObjects.Set("reef", false)         // don't show reef dialect stuff
 
 			var nextLanguage, nextInfixDots, nextDashed bool
 			// read the real values from the user input
@@ -92,6 +93,8 @@ func addMiddleware(router *dgc.Router) {
 					ctx.CustomObjects.Set("showSource", true)
 				} else if arg == "-ipa" {
 					ctx.CustomObjects.Set("showIPA", true)
+				} else if arg == "-reef" {
+					ctx.CustomObjects.Set("reef", true)
 				} else if arg == "-s=false" {
 					ctx.CustomObjects.Set("showDashed", false)
 				} else if arg == "-s" {
