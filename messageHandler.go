@@ -129,7 +129,7 @@ func send1dWordDiscordEmbed(ctx *dgc.Ctx, words []fwew.Word) {
 			ctx.CustomObjects.MustGet("showDashed").(bool),
 			ctx.CustomObjects.MustGet("showInfixDots").(bool),
 			ctx.CustomObjects.MustGet("showSource").(bool),
-			ctx.CustomObjects.MustGet("reefDialect").(bool),
+			ctx.CustomObjects.MustGet("reef").(bool),
 			ctx.CustomObjects.MustGet("langCode").(string),
 		)
 		if err != nil {
@@ -171,7 +171,7 @@ func sendWordDiscordEmbed(ctx *dgc.Ctx, words [][]fwew.Word) {
 				ctx.CustomObjects.MustGet("showDashed").(bool),
 				ctx.CustomObjects.MustGet("showInfixDots").(bool),
 				ctx.CustomObjects.MustGet("showSource").(bool),
-				ctx.CustomObjects.MustGet("reefDialect").(bool),
+				ctx.CustomObjects.MustGet("reef").(bool),
 				ctx.CustomObjects.MustGet("langCode").(string),
 			)
 			if err != nil {
