@@ -100,6 +100,10 @@ func addMiddleware(router *dgc.Router) {
 				} else if arg == "-s" {
 					// next is dashed
 					nextDashed = true
+				} else if arg == "-reef" || arg == "-reef=true" {
+					ctx.CustomObjects.Set("reefDialect", true)
+				} else if arg == "-reef=false" {
+					ctx.CustomObjects.Set("reefDialect", false)
 				} else if strings.HasPrefix(arg, "-") {
 					// ignore every other parameter
 				} else if nextLanguage {

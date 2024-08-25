@@ -540,6 +540,7 @@ func registerCommands(router *dgc.Router) {
 			info := "`fwew`, `list` and `random` can have additional optional parameters.\n" +
 				"  - `-l=<langCode>`: Set the language (de, en, es, et, fr, hu, ko, nl, pl, pt, ru, sv, tr, uk). Default: en\n" +
 				"  - `-r`: `fwew` only param, that will mark the translation \"reversed\". If set, translation will be from locale to Na'vi\n" +
+				"  - `-reef`: Show Reef dialect information\n" +
 				"  - `-i`: Show Infix locations with brackets\n" +
 				"  - `-id=false`: Don't show infix dots\n" +
 				"  - `-src`: Show Source of this words\n" +

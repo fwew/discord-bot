@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -48,7 +47,7 @@ func removeAllReactions(session *discordgo.Session) {
 
 func main() {
 	// load json config
-	jsonFile, err := ioutil.ReadFile("conf.json")
+	jsonFile, err := os.ReadFile("conf.json")
 	if err != nil {
 		panic(err)
 	}
@@ -65,7 +64,7 @@ func main() {
 	}
 
 	// Cache everything and assure the dictionary
-	fwew.StartEverything()
+	log.Print(fwew.StartEverything())
 
 	// cache fwew dictionary
 	// fwew.StartEverything() already does this
