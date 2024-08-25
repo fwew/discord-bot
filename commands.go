@@ -364,7 +364,13 @@ func registerCommands(router *dgc.Router) {
 			}
 
 			argString := ""
-			for i := 0; i < arguments.Amount(); i++ {
+			collect := false
+		 for i := 0; i < arguments.Amount(); i++ {
+   if !collect && arguments.Get(i).Raw()[0] != '-' {
+      collect = true
+   } else {
+      continue
+   }
 				argString += arguments.Get(i).Raw() + " "
 			}
 			argString = argString[:len(argString)-1]
