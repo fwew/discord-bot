@@ -366,14 +366,15 @@ func registerCommands(router *dgc.Router) {
 			argString := ""
 			collect := false
 			for i := 0; i < arguments.Amount(); i++ {
+				if i != 0 {
+					argString += arguments.Get(i).Raw() + " "
+				}
 				if !collect && arguments.Get(i).Raw()[0] != '-' {
 					collect = true
 				} else {
 					continue
 				}
-				argString += arguments.Get(i).Raw() + " "
 			}
-			argString = argString[:len(argString)-1]
 
 			var navi [][]fwew.Word
 
