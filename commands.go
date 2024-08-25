@@ -420,11 +420,16 @@ func registerCommands(router *dgc.Router) {
 			var wordFound bool
 
 			// all params are words to search
-			argString := ""
-			for i := 0; i < arguments.Amount(); i++ {
-				argString += arguments.Get(i).Raw() + " "
-			}
-			argString = argString[:len(argString)-1]
+			                     argString := ""
+                        collect := false
+                 for i := 0; i < arguments.Amount(); i++ {
+   if !collect && arguments.Get(i).Raw()[0] != '-' {
+      collect = true
+   } else {
+      continue
+   }
+                                argString += arguments.Get(i).Raw() + " "
+                        }
 
 			var navi [][]fwew.Word
 			if ctx.CustomObjects.MustGet("reverse").(bool) {
