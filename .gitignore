@@ -95,3 +95,5 @@ conf.json
 bin
 fwew-discord-bot
 .env
+
+.venv
