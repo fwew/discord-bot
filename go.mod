@@ -6,7 +6,7 @@ toolchain go1.22.4
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
-	github.com/fwew/fwew-lib/v5 v5.19.6
+	github.com/fwew/fwew-lib/v5 v5.20.0
 	github.com/knoxfighter/dgc v0.0.0-20201030020537-397f394c484d
 )
 
