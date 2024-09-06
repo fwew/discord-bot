@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
-	"time"
 	"unicode/utf8"
 
 	fwew "github.com/fwew/fwew-lib/v5"
@@ -387,16 +385,10 @@ func registerCommands(router *dgc.Router) {
 			var navi [][]fwew.Word
 
 			var err error
-			start := time.Now()
 			navi, err = fwew.BidirectionalSearch(argString, true, langCode)
 			if err != nil {
 				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 			}
-			elapsed := time.Since(start)
-			hours := int(math.Floor(elapsed.Hours()))
-			minutes := int(math.Floor(elapsed.Minutes())) % 60
-			seconds := int(math.Round(elapsed.Seconds())) & 60
-			fmt.Println("Took " + strconv.Itoa(hours) + " hours " + strconv.Itoa(minutes) + " minutes " + strconv.Itoa(seconds) + " seconds")
 
 			sendWordDiscordEmbed(ctx, navi)
 		},
