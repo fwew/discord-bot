@@ -59,7 +59,12 @@ func list(ctx *dgc.Ctx, firstArg int) {
 	arguments := ctx.Arguments
 	for i := firstArg; i < arguments.Amount(); i++ {
 		argument := arguments.Get(i)
-		args = append(args, argument.Raw())
+		newArg := argument.Raw()
+		if newArg[len(newArg)-1] == ',' {
+			newArg = newArg + arguments.Get(i+1).Raw()
+			i++
+		}
+		args = append(args, newArg)
 	}
 
 	words, err := fwew.List(args, uint8(1))
@@ -364,10 +369,17 @@ func registerCommands(router *dgc.Router) {
 			}
 
 			argString := ""
+			collect := false
 			for i := 0; i < arguments.Amount(); i++ {
-				argString += arguments.Get(i).Raw() + " "
+				if collect {
+					argString += " "
+				} else if arguments.Get(i).Raw()[0] != '-' {
+					collect = true
+				} else {
+					continue
+				}
+				argString += arguments.Get(i).Raw()
 			}
-			argString = argString[:len(argString)-1]
 
 			var navi [][]fwew.Word
 
@@ -415,10 +427,17 @@ func registerCommands(router *dgc.Router) {
 
 			// all params are words to search
 			argString := ""
+			collect := false
 			for i := 0; i < arguments.Amount(); i++ {
-				argString += arguments.Get(i).Raw() + " "
+				if collect {
+					argString += " "
+				} else if arguments.Get(i).Raw()[0] != '-' {
+					collect = true
+				} else {
+					continue
+				}
+				argString += arguments.Get(i).Raw()
 			}
-			argString = argString[:len(argString)-1]
 
 			var navi [][]fwew.Word
 			if ctx.CustomObjects.MustGet("reverse").(bool) {
