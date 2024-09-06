@@ -61,7 +61,7 @@ func list(ctx *dgc.Ctx, firstArg int) {
 		argument := arguments.Get(i)
 		newArg := argument.Raw()
 		if newArg[len(newArg)-1] == ',' {
-			newArg = newArg + " " + arguments.Get(i+1).Raw()
+			newArg = newArg + arguments.Get(i+1).Raw()
 			i++
 		}
 		args = append(args, newArg)
