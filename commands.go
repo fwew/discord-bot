@@ -64,7 +64,6 @@ func list(ctx *dgc.Ctx, firstArg int) {
 			newArg = newArg + " " + arguments.Get(i+1).Raw()
 			i++
 		}
-		fmt.Println(newArg)
 		args = append(args, newArg)
 	}
 
