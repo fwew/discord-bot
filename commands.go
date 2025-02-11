@@ -444,7 +444,7 @@ func registerCommands(router *dgc.Router) {
 				navi = fwew.TranslateToNaviHash(argString, langCode)
 			} else {
 				var err error
-				navi, err = fwew.TranslateFromNaviHash(argString, false)
+				navi, err = fwew.TranslateFromNaviHash(argString, false, false)
 				if err != nil {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 				}
