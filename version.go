@@ -13,7 +13,7 @@ type version struct {
 
 // Version information
 var Version = version{
-	1, 7, 1,
+	1, 8, 0,
 	"",
 }
 
