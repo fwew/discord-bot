@@ -384,7 +384,7 @@ func registerCommands(router *dgc.Router) {
 			var navi [][]fwew.Word
 
 			var err error
-			navi, err = fwew.BidirectionalSearch(argString, true, langCode)
+			navi, err = fwew.BidirectionalSearch(argString, true, langCode, false)
 			if err != nil {
 				sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 			}
@@ -444,7 +444,7 @@ func registerCommands(router *dgc.Router) {
 				navi = fwew.TranslateToNaviHash(argString, langCode)
 			} else {
 				var err error
-				navi, err = fwew.TranslateFromNaviHash(argString, false, false)
+				navi, err = fwew.TranslateFromNaviHash(argString, false, false, false)
 				if err != nil {
 					sendDiscordMessageEmbed(ctx, fmt.Sprintf("Error translating: %s", err), true)
 				}
