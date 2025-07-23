@@ -500,6 +500,9 @@ func registerCommands(router *dgc.Router) {
 			// Parse number
 			arg := argument.Raw()
 
+			// Make sure numbers with commas can be processed
+			arg = strings.ReplaceAll(arg, ",", "")
+
 			// check if arg starts with number
 			var argRune rune
 			for _, r := range arg {
