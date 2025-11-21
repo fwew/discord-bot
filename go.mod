@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
-	github.com/fwew/fwew-lib/v5 v5.25.3
+	github.com/fwew/fwew-lib/v5 v5.25.4
 	github.com/knoxfighter/dgc v0.0.0-20201030020537-397f394c484d
 )
 
