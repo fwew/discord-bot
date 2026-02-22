@@ -38,6 +38,8 @@ func setDefaultLanguage(ctx *dgc.Ctx) {
 		ctx.CustomObjects.Set("langCode", "ru")
 	case "1063774395748847648":
 		ctx.CustomObjects.Set("langCode", "ru")
+	case "1471564289788608532":
+		ctx.CustomObjects.Set("langCode", "uk")
 	}
 }
 
