@@ -92,7 +92,7 @@ func lenition(ctx *dgc.Ctx) {
 		output += "→ " + lenition[1] + "\n\n"
 	}
 	output += "leniting prefixes: me+, pxe+, ay+, pe+\n"
-	output += "leniting adpositions: fpi, ìlä, lisre, mì, nuä, pxisre, ro, sko, sre, wä\n"
+	output += "leniting adpositions: fpi, ìlä, lisre, mì, nuä, pxisre, ro, sko, sre, sru, wä\n"
 	output += "```"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
@@ -113,7 +113,7 @@ func shortLenition(ctx *dgc.Ctx) {
 		output += " → " + lenition[1] + "\n\n"
 	}
 	output += "leniting prefixes: me+, pxe+, ay+, pe+\n"
-	output += "leniting adpositions: fpi, ìlä, lisre, mì, nuä, pxisre, ro, sko, sre, wä\n"
+	output += "leniting adpositions: fpi, ìlä, lisre, mì, nuä, pxisre, ro, sko, sre, sru, wä\n"
 	output += "```"
 	sendDiscordMessageEmbed(ctx, output, false)
 }
