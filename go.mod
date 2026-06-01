@@ -1,15 +1,15 @@
 module fwew-discord-bot
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
-	github.com/fwew/fwew-lib/v5 v5.27.2
+	github.com/fwew/fwew-lib/v5 v5.28.0
 	github.com/knoxfighter/dgc v0.0.0-20201030020537-397f394c484d
 )
 
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
+	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/karrick/tparse/v2 v2.8.1 // indirect
