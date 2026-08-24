@@ -11,11 +11,10 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
-	github.com/gorilla/websocket v1.5.1 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/karrick/tparse/v2 v2.8.1 // indirect
 	github.com/zekroTJA/timedmap v0.0.0-20200518230343-de9b879d109a // indirect
 	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 )
 
